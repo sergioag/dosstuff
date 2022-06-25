@@ -12,7 +12,7 @@ all: $(TARGETS)
 
 %.bin: %.asm
 	$(NASM) $< $(NASM_PARAMS) -o $@ -l $(basename $@).lst
-	perl tools/checksum.pl $@ $(BIOS_SIZE)
+	perl ../tools/checksum.pl $@ $(BIOS_SIZE)
 
 wdbios.asm: Boot.asm Initialize.asm Int13h.asm IrqHandler.asm \
 	inc/RamVars.inc inc/RomVars.inc inc/biosseg.inc inc/drvpar1.inc \
