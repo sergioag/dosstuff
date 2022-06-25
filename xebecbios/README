@@ -1,0 +1,20 @@
+This directory contains the BIOS for the IBM-provided Xebec MFM controller.
+There were several versions of this controller:
+
+- (Supported!) Variation #1: this officially supports only the Seagate
+  ST-412 drive. You need to use a 2732 or compatible ROM. Using a 2764
+  won't work.
+- (Should work) Variation #2: a more integrated version, but otherwise
+  identical. Even though this should work the same as #1, I don't have
+  it and thus cannot test if it works. First difference seems to be
+  that the ROM is now 8KB long, so a 2764 should be used.
+- (Coming soon!) Variation #3 (also known as "20MB Fixed Disk Drive
+  Adapter"): This will be supported soon. Its BIOS is basically the
+  same except that is does have switches to select different drive
+  geometries and also the code has been greatly improved. Will be
+  supported very soon.
+
+Since the hardware seems to be the same between the 3 versions, except the
+switches, I intend to have a single source code for all of them. I also
+plan to include dynamic geometry and a friendly way of performing a
+low-level format as is available with other controllers.

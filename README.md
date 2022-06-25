@@ -14,6 +14,10 @@ description of the contents:
 2. wdbios: Reverse-engineered BIOS for the WD1002-WX1, a very old MFM,
    XT-class, hard drive controller. It's equivalent to the Super-BIOS
    v2.4, so dynamic geometry support is present.
+3. xebecbios: This is the BIOS for the IBM-provided Xebec MFM controller
+   that came with the IBM XT, but modified to build with NASM. For the
+   details of hardware revisions supported, please see the README file
+   in its directory.
 
 All the code within this repository, unless stated otherwise in the
 corresponding directory, falls under the 3-clause BSD license, as found
