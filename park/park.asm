@@ -57,7 +57,6 @@ _driveLoopStart:
 	TEST	CL,CL				; Is it zero?
 	MOV	DX,msgNoFixedDrives		; Error message
 	JZ	_exit				; No point of continuing
-	DEC	CL				; Make zero-based
 	MOV	DL,80h				; Starting drive
 
 _driveLoop:
@@ -140,17 +139,17 @@ _print:
 	RET
 
 msgConfirm:
-	DB	"This program will park all your drive's heads",13,10
+	DB	"This program will park all your hard drive's heads",13,10
 	DB	'to the landing zone and then halt your computer.',13,10
 	DB	'Do you want to continue? (Y/N): $'
 msgNoFixedDrives:
 	DB	'Your system has no fixed disk drives.',13,10,'$'
 msgNotParked:
-	DB	13,10,'Your hard disk has NOT been parked.',13,10,'$'
+	DB	13,10,'Your hard drive has NOT been parked.',13,10,'$'
 msgSafePowerOff:
-	DB	13,10,'It is now safe to power off your computer.',13,10,'$'
+	DB	13,10,'Drives parked. It is now safe to power off your computer.',13,10,'$'
 msgErrorParking:
-	DB	'Error parking your hard drive.',13,10,'$'
+	DB	'Error parking hard drive.',13,10,'$'
 
 %ifdef DEBUG
 msgParked:

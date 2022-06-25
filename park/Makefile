@@ -7,7 +7,7 @@ TARGETS=park.com
 all: $(TARGETS)
 
 %.com: %.asm
-	$(NASM) $< $(NASM_PARAMS) -DDEBUG -o $@ -l $(basename $@).lst
+	$(NASM) $< $(NASM_PARAMS) -o $@ -l $(basename $@).lst
 
 .PHONY: clean
 clean:
