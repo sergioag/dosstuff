@@ -14,3 +14,7 @@ description of the contents:
 2. wdbios: Reverse-engineered BIOS for the WD1002-WX1, a very old MFM,
    XT-class, hard drive controller. It's equivalent to the Super-BIOS
    v2.4, so dynamic geometry support is present.
+
+All the code within this repository, unless stated otherwise in the
+corresponding directory, falls under the 3-clause BSD license, as found
+in the LICENSE file.
