@@ -273,7 +273,7 @@ P9:
         MOV     AX,RESET_FLAG
         CMP     AX,1234H                ; KEYBOARD RESET
         JNE     P8
-        MOV     TIMER_LOW,401D          ; SKIP WAIT ON RESET
+        MOV     TIMER_LOW,410D          ; SKIP WAIT ON RESET
 P8:
         IN      AL,021H                 ; TIMER
         AND     AL,0FEH                 ; ENABLE TIMER
