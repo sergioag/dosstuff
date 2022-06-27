@@ -779,9 +779,7 @@ G5:
         POP     BX                      ; RESTORE REGISTERS
         POP     ES
         POP     DS
-        RET
-        NOP
-        NOP
+        RETF    2
 G4:
         MOV     BYTE [DISK_STATUS],INIT_FAIL    ; OPERATION FAILED
         MOV     AH,INIT_FAIL

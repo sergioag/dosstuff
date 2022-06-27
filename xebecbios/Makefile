@@ -4,7 +4,7 @@ NASM_PARAMS=-f bin -O2
 
 TARGETS=xebecv1.bin
 
-BIOS_SIZE=4096
+BIOS_SIZE=8192
 
 all: $(TARGETS)
 
