@@ -2,7 +2,7 @@
 NASM=nasm
 NASM_PARAMS=-f bin -O2
 
-TARGETS=xebecv1.bin
+TARGETS=xebecv1.bin xebecv2.bin
 
 BIOS_SIZE=8192
 
@@ -14,5 +14,5 @@ all: $(TARGETS)
 
 .PHONY: clean
 clean:
-	rm -f $(TARGETS) $(basename $(TARGETS)).lst
+	rm -f $(TARGETS) $(addsuffix .lst,$(basename $(TARGETS)))
 
