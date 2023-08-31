@@ -839,7 +839,7 @@ LAB_0678:
 LAB_067d:
 	test	byte [bp+18h],60h
 	jnz	LAB_068b
-	cs call	word [bx+1B8Ch]
+	cs call	word [bx+LAB_1b8c]
 	jmp	SHORT LAB_0690
 
 	nop
@@ -950,7 +950,7 @@ LAB_0741:
 	mov	bl,[bp+13h]
 	mov	bh,0
 	shl	bx,1
-	cs mov	ax,[bx+488h]
+	cs mov	ax,[bx+LAB_0488]
 	test	ah,10h
 	jnz	LAB_0763
 	jmp	SHORT LAB_07bc
@@ -1888,7 +1888,7 @@ LAB_0d47:
 	push	es
 	push	cs
 	pop	es
-	mov	di,0ABCh
+	mov	di,LAB_0abc
 	mov	cx,14h
 	repne scasb
 	pop	es
@@ -2475,7 +2475,7 @@ LAB_1157:
 	mov	bl,ah
 	mov	bh,0
 	shl	bx,1
-	cs mov	ax,[bx+488h]
+	cs mov	ax,[bx+LAB_0488]
 	jmp	LAB_067d
 
 LAB_116d:
@@ -2509,7 +2509,7 @@ LAB_1197:
 	call	LAB_06ae
 	jc	LAB_11c0
 	or	byte [bp+19h],40h
-	cs call	[bx+1B8Ch]
+	cs call	[bx+LAB_1b8c]
 	and	byte [bp+19h],0BFh
 LAB_11c0:
 	jmp	LAB_069b
@@ -2840,8 +2840,8 @@ LAB_1428:
 
 LAB_1446:
 	mov	word [bp+0],1
-	cs mov	ax,[bx+488h]
-	cs call	[bx+1B8Ch]
+	cs mov	ax,[bx+LAB_0488]
+	cs call	[bx+LAB_1b8c]
 	call	LAB_0e86
 	ret
 
