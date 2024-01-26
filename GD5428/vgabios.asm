@@ -9565,225 +9565,267 @@ LAB_4f5b:
 
 	; Video Save Pointer Table
 LAB_4f73:
-	dw	LAB_502b, 0C000h			; Video Parameter Table pointer
-	dd	0					; Parameter Dynamic Save Area
-	dd	0					; Alphanumeric Character Set Override
-	dd	0					; Graphics Character Set Override
-	dw	LAB_4fc3, 0C000h			; Secondary Save Pointer Table pointer
-	dd	0					; Reserved
-	dd	0					; Reserved
-	
+istruc VideoSavePointerTbl
+	AT VideoSavePointerTbl.wVideoParameterTableOff,		dw	LAB_502b
+	AT VideoSavePointerTbl.wVideoParameterTableSeg,		dw	0C000h
+	AT VideoSavePointerTbl.wVideoDynamicSaveAreaOff,	dw	0
+	AT VideoSavePointerTbl.wVideoDynamicSaveAreaSeg,	dw	0
+	AT VideoSavePointerTbl.wAlphaCharsetOverrideOff,	dw	0
+	AT VideoSavePointerTbl.wAlphaCharsetOverrideSeg,	dw	0
+	AT VideoSavePointerTbl.wGraphicsCharsetOverrideOff,	dw	0
+	AT VideoSavePointerTbl.wGraphicsCharsetOverrideSeg,	dw	0
+	AT VideoSavePointerTbl.wSecSavePointerTableOff,		dw	LAB_4fc3
+	AT VideoSavePointerTbl.wSecSavePointerTableSeg,		dw	0C000h
+	AT VideoSavePointerTbl.dwReserved1,			dd	0
+	AT VideoSavePointerTbl.dwReserved2,			dd	0
+iend
+
 	db	00h, 00h, 00h, 00h
 	db	00h, 00h, 00h, 00h, 00h, 00h, 21h, 00h, 42h, 14h, 00h, 0E0h, 07h, 19h, 00h, 0E0h
 	db	25h, 00h, 56h, 52h
 
 	; Video Save Pointer Table
 LAB_4fa7:
-	dw	LAB_502b, 0E000h			; Video Parameter Table pointer
-	dd	0					; Parameter Dynamic Save Area
-	dd	0					; Alphanumeric Character Set Override
-	dd	0					; Graphics Character Set Override
-	dw	LAB_4fdd, 0E000h			; Secondary Save Pointer Table pointer
-	dd	0					; Reserved
-	dd	0					; Reserved
+istruc VideoSavePointerTbl
+	AT VideoSavePointerTbl.wVideoParameterTableOff,		dw	LAB_502b
+	AT VideoSavePointerTbl.wVideoParameterTableSeg,		dw	0E000h
+	AT VideoSavePointerTbl.wVideoDynamicSaveAreaOff,	dw	0
+	AT VideoSavePointerTbl.wVideoDynamicSaveAreaSeg,	dw	0
+	AT VideoSavePointerTbl.wAlphaCharsetOverrideOff,	dw	0
+	AT VideoSavePointerTbl.wAlphaCharsetOverrideSeg,	dw	0
+	AT VideoSavePointerTbl.wGraphicsCharsetOverrideOff,	dw	0
+	AT VideoSavePointerTbl.wGraphicsCharsetOverrideSeg,	dw	0
+	AT VideoSavePointerTbl.wSecSavePointerTableOff,		dw	LAB_4fdd
+	AT VideoSavePointerTbl.wSecSavePointerTableSeg,		dw	0E000h
+	AT VideoSavePointerTbl.dwReserved1,			dd	0
+	AT VideoSavePointerTbl.dwReserved2,			dd	0
+iend
 
 	; Secondary Video Save Pointer Table
 LAB_4fc3:
-	dw	001Ah					; Length of this table in bytes, including this word
-	dw	LAB_4ff7, 0C000h			; Display Combination Code Table pointer
-	dd	0					; second Alphanumeric Character Set Override
-	dd	0					; User Palette Profile Table
-	dd	0					; Reserved
-	dd	0					; Reserved
-	dd	0					; Reserved
+istruc SecSavePointerTbl
+	AT SecSavePointerTbl.wSize,				db	SecSavePointerTbl_size
+	AT SecSavePointerTbl.wDspCombinationCodeTblOff,		dw	LAB_4ff7
+	AT SecSavePointerTbl.wDspCombinationCodeTblSeg,		dw	0C000h
+	AT SecSavePointerTbl.wSecAlphaCharsetOverrideOff,	dw	0
+	AT SecSavePointerTbl.wSecAlphaCharsetOverrideSeg,	dw	0
+	AT SecSavePointerTbl.wUsrPaletteProfileTblOff,		dw	0
+	AT SecSavePointerTbl.wUsrPaletteProfileTblSeg,		dw	0
+	AT SecSavePointerTbl.dwReserved1,			dd	0
+	AT SecSavePointerTbl.dwReserved2,			dd	0
+	AT SecSavePointerTbl.dwReserved3,			dd	0
+iend
 
 	; Secondary Video Save Pointer Table
 LAB_4fdd:
-	dw	001Ah					; Length of this table in bytes, including this word
-	dw	LAB_4ff7, 0E000h			; Display Combination Code Table pointer
-	dd	0					; second Alphanumeric Character Set Override
-	dd	0					; User Palette Profile Table
-	dd	0					; Reserved
-	dd	0					; Reserved
-	dd	0					; Reserved
+istruc SecSavePointerTbl
+	AT SecSavePointerTbl.wSize,				db	SecSavePointerTbl_size
+	AT SecSavePointerTbl.wDspCombinationCodeTblOff,		dw	LAB_4ff7
+	AT SecSavePointerTbl.wDspCombinationCodeTblSeg,		dw	0E000h
+	AT SecSavePointerTbl.wSecAlphaCharsetOverrideOff,	dw	0
+	AT SecSavePointerTbl.wSecAlphaCharsetOverrideSeg,	dw	0
+	AT SecSavePointerTbl.wUsrPaletteProfileTblOff,		dw	0
+	AT SecSavePointerTbl.wUsrPaletteProfileTblSeg,		dw	0
+	AT SecSavePointerTbl.dwReserved1,			dd	0
+	AT SecSavePointerTbl.dwReserved2,			dd	0
+	AT SecSavePointerTbl.dwReserved3,			dd	0
+iend
 
 	; Display Combination Code Table
 LAB_4ff7:
-	db	10h					; Number of entries in the DCC table at offset 04h
-	db	01h					; Version number
-	db	08h					; Maximum display type code that can appear in DCC table
-	db	00h					; Reserved
-	db	00h, 00h				; Entries (2*10h)
-	db	00h, 01h
-	db	00h, 02h
-	db	02h, 01h
-	db	00h, 04h
-	db	04h, 01h
-	db	00h, 05h
-	db	02h, 05h
-	db	00h, 06h
-	db	01h, 06h
-	db	05h, 06h
-	db	00h, 08h
-	db	01h, 08h
-	db	00h, 07h
-	db	02h, 07h
-	db	06h, 07h
+istruc DspCombinationCodeTbl
+	AT DspCombinationCodeTbl.bNumEntries,			db	10h
+	AT DspCombinationCodeTbl.bVersion,			db	1
+	AT DspCombinationCodeTbl.bMaxCodeNumber,		db	VGA_COLOR
+	AT DspCombinationCodeTbl.bReserved,			db	0
+iend
+DSP_COMBINATION		NO_DISPLAY,	NO_DISPLAY
+DSP_COMBINATION		NO_DISPLAY,	MDA_MONO
+DSP_COMBINATION		NO_DISPLAY,	CGA_COLOR
+DSP_COMBINATION		CGA_COLOR,	MDA_MONO
+DSP_COMBINATION		NO_DISPLAY,	EGA_COLOR
+DSP_COMBINATION		EGA_COLOR,	MDA_MONO
+DSP_COMBINATION		NO_DISPLAY,	EGA_MONO
+DSP_COMBINATION		CGA_COLOR,	EGA_MONO
+DSP_COMBINATION		NO_DISPLAY,	PGA
+DSP_COMBINATION		MDA_MONO,	PGA
+DSP_COMBINATION		EGA_MONO,	PGA
+DSP_COMBINATION		NO_DISPLAY,	VGA_COLOR
+DSP_COMBINATION		MDA_MONO,	VGA_COLOR
+DSP_COMBINATION		NO_DISPLAY,	VGA_MONO
+DSP_COMBINATION		CGA_COLOR,	VGA_MONO
+DSP_COMBINATION		PGA,		VGA_MONO
 
 LAB_501b:
 	db	0FFh, 0E0h, 0Fh, 00h, 00h, 00h, 00h, 07h, 02h, 08h, 0FFh, 0Eh, 00h, 00h, 3Fh, 00h
 LAB_502b:
 	; Mode 00h
-	db	40				; Columns
-	db	24				; Rows minus one
-	db	8				; Height of character in scan lines
-	dw	800h				; Size of video buffer
-	db	09h, 03h, 00h, 02h		; Values for Sequence Registers 1-4
-	db	63h				; Value for Miscellaneous Output Register
-	db	2Dh, 27h, 28h, 90h, 2Bh		; Values of CRTC Registers 00h-18h
-	db	0A0h, 0BFh, 1Fh, 00h, 0C7h
-	db	06h, 07h, 00h, 00h, 00h
-	db	00h, 9Ch, 8Eh, 8Fh, 14h
-	db	1Fh, 96h, 0B9h, 0A3h, 0FFh
-	db	00h, 01h, 02h, 03h, 04h		; Values for Attribute Controller Registers 00h-13h
-	db	05h, 06h, 07h, 10h, 11h
-	db	12h, 13h, 14h, 15h, 16h
-	db	17h, 08h, 00h, 0Fh, 00h
-	db	00h, 00h, 00h, 00h, 00h		; Values for Graphics Controller Registers 00h-08h
-	db	10h, 0Eh, 00h, 0FFh
+istruc VideoParameterTbl
+	AT VideoParameterTbl.bNumColumns,	db	40
+	AT VideoParameterTbl.bNumRowsMinusOne,	db	24
+	AT VideoParameterTbl.bCharHeight,	db	8
+	AT VideoParameterTbl.wBufferSize,	dw	800h
+	AT VideoParameterTbl.baSeqRegs,		db	09h, 03h, 00h, 02h
+	AT VideoParameterTbl.bMiscOutputReg,	db	63h
+	AT VideoParameterTbl.baCRTCRegs,	db	2Dh, 27h, 28h, 90h, 2Bh
+						db	0A0h, 0BFh, 1Fh, 00h, 0C7h
+						db	06h, 07h, 00h, 00h, 00h
+						db	00h, 9Ch, 8Eh, 8Fh, 14h
+						db	1Fh, 96h, 0B9h, 0A3h, 0FFh
+	AT VideoParameterTbl.baAttrContRegs,	db	00h, 01h, 02h, 03h, 04h
+						db	05h, 06h, 07h, 10h, 11h
+						db	12h, 13h, 14h, 15h, 16h
+						db	17h, 08h, 00h, 0Fh, 00h
+	AT VideoParameterTbl.baGraphContRegs,	db	00h, 00h, 00h, 00h, 00h
+						db	10h, 0Eh, 00h, 0FFh
+iend
 
 	; Mode 01h
-	db	40				; Columns
-	db	24				; Rows minus one
-	db	8				; Height of character in scan lines
-	dw	800h				; Size of video buffer
-	db	09h, 03h, 00h, 02h		; Values for Sequence Registers 1-4
-	db	63h				; Value for Miscellaneous Output Register
-	db	2Dh, 27h, 28h, 90h, 2Bh		; Values for CRTC Registers 00h-18h
-	db	0A0h, 0BFh, 1Fh, 00h, 0C7h
-	db	06h, 07h, 00h, 00h, 00h
-	db	00h, 9Ch, 8Eh, 8Fh, 14h
-	db	1Fh, 96h, 0B9h, 0A3h, 0FFh
-	db	00h, 01h, 02h, 03h, 04h		; Values for Attribute Controller Registers 00h-13h
-	db	05h, 06h, 07h, 10h, 11h
-	db	12h, 13h, 14h, 15h, 16h
-	db	17h, 08h, 00h, 0Fh, 00h
-	db	00h, 00h, 00h, 00h, 00h		; Values for Graphics Controller Registers 00h-08h
-	db	10h, 0Eh, 00h, 0FFh
+istruc VideoParameterTbl
+	AT VideoParameterTbl.bNumColumns,	db	40
+	AT VideoParameterTbl.bNumRowsMinusOne,	db	24
+	AT VideoParameterTbl.bCharHeight,	db	8
+	AT VideoParameterTbl.wBufferSize,	dw	800h
+	AT VideoParameterTbl.baSeqRegs,		db	09h, 03h, 00h, 02h
+	AT VideoParameterTbl.bMiscOutputReg,	db	63h
+	AT VideoParameterTbl.baCRTCRegs,	db	2Dh, 27h, 28h, 90h, 2Bh
+						db	0A0h, 0BFh, 1Fh, 00h, 0C7h
+						db	06h, 07h, 00h, 00h, 00h
+						db	00h, 9Ch, 8Eh, 8Fh, 14h
+						db	1Fh, 96h, 0B9h, 0A3h, 0FFh
+	AT VideoParameterTbl.baAttrContRegs,	db	00h, 01h, 02h, 03h, 04h
+						db	05h, 06h, 07h, 10h, 11h
+						db	12h, 13h, 14h, 15h, 16h
+						db	17h, 08h, 00h, 0Fh, 00h
+	AT VideoParameterTbl.baGraphContRegs,	db	00h, 00h, 00h, 00h, 00h
+						db	10h, 0Eh, 00h, 0FFh
+iend
 
 	; Mode 02h
-	db	80				; Columns
-	db	24				; Rows minus one
-	db	8				; Height of character in scan lines
-	dw	1000h				; Size of video buffer
-	db	01h, 03h, 00h, 02h		; Values for Sequence Registers 1-4
-	db	63h				; Value for Miscellaneous Output Register
-	db	5Fh, 4Fh, 50h, 82h, 55h		; Values for CRTC Register 00h-18h
-	db	81h, 0BFh, 1Fh, 00h, 0C7h
-	db	06h, 07h, 00h, 00h, 00h
-	db	00h, 9Ch, 8Eh, 8Fh, 28h
-	db	1Fh, 96h, 0B9h, 0A3h, 0FFh
-	db	00h, 01h, 02h, 03h, 04h		; Values for Attribute Controller Registers 00h-13h
-	db	05h, 06h, 07h, 10h, 11h
-	db	12h, 13h, 14h, 15h, 16h
-	db	17h, 08h, 00h, 0Fh, 00h
-	db	00h, 00h, 00h, 00h, 00h		; Values for Graphics Controller Registers 00h-08h
-	db	10h, 0Eh, 00h, 0FFh
+istruc VideoParameterTbl
+	AT VideoParameterTbl.bNumColumns,	db	80
+	AT VideoParameterTbl.bNumRowsMinusOne,	db	24
+	AT VideoParameterTbl.bCharHeight,	db	8
+	AT VideoParameterTbl.wBufferSize,	dw	1000h
+	AT VideoParameterTbl.baSeqRegs,		db	01h, 03h, 00h, 02h
+	AT VideoParameterTbl.bMiscOutputReg,	db	63h
+	AT VideoParameterTbl.baCRTCRegs,	db	5Fh, 4Fh, 50h, 82h, 55h
+						db	81h, 0BFh, 1Fh, 00h, 0C7h
+						db	06h, 07h, 00h, 00h, 00h
+						db	00h, 9Ch, 8Eh, 8Fh, 28h
+						db	1Fh, 96h, 0B9h, 0A3h, 0FFh
+	AT VideoParameterTbl.baAttrContRegs,	db	00h, 01h, 02h, 03h, 04h
+						db	05h, 06h, 07h, 10h, 11h
+						db	12h, 13h, 14h, 15h, 16h
+						db	17h, 08h, 00h, 0Fh, 00h
+	AT VideoParameterTbl.baGraphContRegs,	db	00h, 00h, 00h, 00h, 00h
+						db	10h, 0Eh, 00h, 0FFh
+iend
 
 	; Mode 03h
-	db	80				; Columns
-	db	24				; Rows minus one
-	db	8				; Height of character in scan lines
-	dw	1000h				; Size of video buffer
-	db	01h, 03h, 00h, 02h		; Values for Sequence Registers 1-4
-	db	63h				; Value for Miscellaneous Output Register
-	db	5Fh, 4Fh, 50h, 82h, 55h		; Values for CRTC Register 00h-18h
-	db	81h, 0BFh, 1Fh, 00h, 0C7h
-	db	06h, 07h, 00h, 00h, 00h
-	db	00h, 9Ch, 8Eh, 8Fh, 28h
-	db	1Fh, 96h, 0B9h, 0A3h, 0FFh
-	db	00h, 01h, 02h, 03h, 04h		; Values for Attribute Controller Registers 00h-13h
-	db	05h, 06h, 07h, 10h, 11h
-	db	12h, 13h, 14h, 15h, 16h
-	db	17h, 08h, 00h, 0Fh, 00h
-	db	00h, 00h, 00h, 00h, 00h		; Values for Graphics Controller Registers 00h-08h
-	db	10h, 0Eh, 00h, 0FFh
+istruc VideoParameterTbl
+	AT VideoParameterTbl.bNumColumns,	db	80
+	AT VideoParameterTbl.bNumRowsMinusOne,	db	24
+	AT VideoParameterTbl.bCharHeight,	db	8
+	AT VideoParameterTbl.wBufferSize,	dw	1000h
+	AT VideoParameterTbl.baSeqRegs,		db	01h, 03h, 00h, 02h
+	AT VideoParameterTbl.bMiscOutputReg,	db	63h
+	AT VideoParameterTbl.baCRTCRegs,	db	5Fh, 4Fh, 50h, 82h, 55h
+						db	81h, 0BFh, 1Fh, 00h, 0C7h
+						db	06h, 07h, 00h, 00h, 00h
+						db	00h, 9Ch, 8Eh, 8Fh, 28h
+						db	1Fh, 96h, 0B9h, 0A3h, 0FFh
+	AT VideoParameterTbl.baAttrContRegs,	db	00h, 01h, 02h, 03h, 04h
+						db	05h, 06h, 07h, 10h, 11h
+						db	12h, 13h, 14h, 15h, 16h
+						db	17h, 08h, 00h, 0Fh, 00h
+	AT VideoParameterTbl.baGraphContRegs,	db	00h, 00h, 00h, 00h, 00h
+						db	10h, 0Eh, 00h, 0FFh
+iend
 
 	; Mode 04h
-	db	40				; Columns
-	db	24				; Rows minus one
-	db	8				; Height of character in scan lines
-	dw	4000h				; Size of video buffer
-	db	09h, 03h, 00h, 02h		; Values for Sequence Registers 1-4
-	db	63h				; Value for Miscellaneous Output Register
-	db	2Dh, 27h, 28h, 90h, 2Bh		; Values for CRTC Registers 00h-18h
-	db	80h, 0BFh, 1Fh, 00h, 0C1h
-	db	00h, 00h, 00h, 00h, 00h
-	db	00h, 9Ch, 8Eh, 8Fh, 14h
-	db	00h, 96h, 0B9h, 0A2h, 0FFh
-	db	00h, 13h, 15h, 17h, 02h		; Values for Attribute Controller Registers 00h-13h
-	db	04h, 06h, 07h, 10h, 11h
-	db	12h, 13h, 14h, 15h, 16h
-	db	17h, 01h, 00h, 03h, 00h
-	db	00h, 00h, 00h, 00h, 00h		; Values for Graphics Controller Registers 00h-08h
-	db	30h, 0Fh, 00h, 0FFh
+istruc VideoParameterTbl
+	AT VideoParameterTbl.bNumColumns,	db	40
+	AT VideoParameterTbl.bNumRowsMinusOne,	db	24
+	AT VideoParameterTbl.bCharHeight,	db	8
+	AT VideoParameterTbl.wBufferSize,	dw	4000h
+	AT VideoParameterTbl.baSeqRegs,		db	09h, 03h, 00h, 02h
+	AT VideoParameterTbl.bMiscOutputReg,	db	63h
+	AT VideoParameterTbl.baCRTCRegs,	db	2Dh, 27h, 28h, 90h, 2Bh
+						db	80h, 0BFh, 1Fh, 00h, 0C1h
+						db	00h, 00h, 00h, 00h, 00h
+						db	00h, 9Ch, 8Eh, 8Fh, 14h
+						db	00h, 96h, 0B9h, 0A2h, 0FFh
+	AT VideoParameterTbl.baAttrContRegs,	db	00h, 13h, 15h, 17h, 02h
+						db	04h, 06h, 07h, 10h, 11h
+						db	12h, 13h, 14h, 15h, 16h
+						db	17h, 01h, 00h, 03h, 00h
+	AT VideoParameterTbl.baGraphContRegs,	db	00h, 00h, 00h, 00h, 00h
+						db	30h, 0Fh, 00h, 0FFh
+iend
 
 	; Mode 05h
-	db	40				; Columns
-	db	24				; Rows minus one
-	db	8				; Height of character in scan lines
-	dw	4000h				; Size of video buffer
-	db	09h, 03h, 00h, 02h		; Values for Sequence Registers 1-4
-	db	63h				; Value for Miscallaneous Output Register
-	db	2Dh, 27h, 28h, 90h, 2Bh		; Values for CRTC Registers 00h-18h
-	db	80h, 0BFh, 1Fh, 00h, 0C1h
-	db	00h, 00h, 00h, 00h, 00h
-	db	00h, 9Ch, 8Eh, 8Fh, 14h
-	db	00h, 96h, 0B9h, 0A2h, 0FFh
-	db	00h, 13h, 15h, 17h, 02h		; Values for Attribute Controller Registers 00h-13h
-	db	04h, 06h, 07h, 10h, 11h
-	db	12h, 13h, 14h, 15h, 16h
-	db	17h, 01h, 00h, 03h, 00h
-	db	00h, 00h, 00h, 00h, 00h		; Values for Graphics Controller Registers 00h-08h
-	db	30h, 0Fh, 00h, 0FFh
+istruc VideoParameterTbl
+	AT VideoParameterTbl.bNumColumns,	db	40
+	AT VideoParameterTbl.bNumRowsMinusOne,	db	24
+	AT VideoParameterTbl.bCharHeight,	db	8
+	AT VideoParameterTbl.wBufferSize,	dw	4000h
+	AT VideoParameterTbl.baSeqRegs,		db	09h, 03h, 00h, 02h
+	AT VideoParameterTbl.bMiscOutputReg,	db	63h
+	AT VideoParameterTbl.baCRTCRegs,	db	2Dh, 27h, 28h, 90h, 2Bh
+						db	80h, 0BFh, 1Fh, 00h, 0C1h
+						db	00h, 00h, 00h, 00h, 00h
+						db	00h, 9Ch, 8Eh, 8Fh, 14h
+						db	00h, 96h, 0B9h, 0A2h, 0FFh
+	AT VideoParameterTbl.baAttrContRegs,	db	00h, 13h, 15h, 17h, 02h
+						db	04h, 06h, 07h, 10h, 11h
+						db	12h, 13h, 14h, 15h, 16h
+						db	17h, 01h, 00h, 03h, 00h
+	AT VideoParameterTbl.baGraphContRegs,	db	00h, 00h, 00h, 00h, 00h
+						db	30h, 0Fh, 00h, 0FFh
+iend
 
 	; Mode 06h
-	db	80				; Columns
-	db	24				; Rows minus one
-	db	8				; Height of character in scan lines
-	dw	4000h				; Size of video buffer
-	db	01h, 01h, 00h, 06h		; Values for Sequence Registers 1-4
-	db	63h				; Value for Miscellaneous Output Register
-	db	5Fh, 4Fh, 50h, 82h, 54h		; Values for CRTC Registers 00h-18h
-	db	80h, 0BFh, 1Fh, 00h, 0C1h
-	db	00h, 00h, 00h, 00h, 00h
-	db	00h, 9Ch, 8Eh, 8Fh, 28h
-	db	00h, 96h, 0B9h, 0C2h, 0FFh
-	db	00h, 17h, 17h, 17h, 17h		; Values for Attribute Controller Registers 00h-13h
-	db	17h, 17h, 17h, 17h, 17h
-	db	17h, 17h, 17h, 17h, 17h
-	db	17h, 01h, 00h, 01h, 00h
-	db	00h, 00h, 00h, 00h, 00h		; Values for Graphics Controller Registers 00h-08h
-	db	00h, 0Dh, 00h, 0FFh
+istruc VideoParameterTbl
+	AT VideoParameterTbl.bNumColumns,	db	80
+	AT VideoParameterTbl.bNumRowsMinusOne,	db	24
+	AT VideoParameterTbl.bCharHeight,	db	8
+	AT VideoParameterTbl.wBufferSize,	dw	4000h
+	AT VideoParameterTbl.baSeqRegs,		db	01h, 01h, 00h, 06h
+	AT VideoParameterTbl.bMiscOutputReg,	db	63h
+	AT VideoParameterTbl.baCRTCRegs,	db	5Fh, 4Fh, 50h, 82h, 54h
+						db	80h, 0BFh, 1Fh, 00h, 0C1h
+						db	00h, 00h, 00h, 00h, 00h
+						db	00h, 9Ch, 8Eh, 8Fh, 28h
+						db	00h, 96h, 0B9h, 0C2h, 0FFh
+	AT VideoParameterTbl.baAttrContRegs,	db	00h, 17h, 17h, 17h, 17h
+						db	17h, 17h, 17h, 17h, 17h
+						db	17h, 17h, 17h, 17h, 17h
+						db	17h, 01h, 00h, 01h, 00h
+	AT VideoParameterTbl.baGraphContRegs,	db	00h, 00h, 00h, 00h, 00h
+						db	00h, 0Dh, 00h, 0FFh
+iend
 
 	; Mode 07h
-	db	80				; Columns
-	db	24				; Rows minus one
-	db	14				; Height of character in scan lines
-	dw	1000h				; Size of video buffer
-	db	00h, 03h, 00h, 03h		; Values for Sequence Registers 1-4
-	db	0A6h				; Value
-	db	5Fh, 4Fh, 50h, 82h, 55h		; Values for CRTC Registers 00h-18h
-	db	81h, 0BFh, 1Fh, 00h, 4Dh
-	db	0Bh, 0Ch, 00h, 00h, 00h
-	db	00h, 83h, 85h, 5Dh, 28h
-	db	0Dh, 63h, 0BAh, 0A3h, 0FFh
-	db	00h, 08h, 08h, 08h, 08h		; Values for Attribute Controller Registers 00h-13h
-	db	08h, 08h, 08h, 10h, 18h
-	db	18h, 18h, 18h, 18h, 18h
-	db	18h, 0Eh, 00h, 0Fh, 08h
-	db	00h, 00h, 00h, 00h, 00h		; Values for Graphics Controller Registers 00h-08h
-	db	10h, 0Ah, 00h, 0FFh
+istruc VideoParameterTbl
+	AT VideoParameterTbl.bNumColumns,	db	80
+	AT VideoParameterTbl.bNumRowsMinusOne,	db	24
+	AT VideoParameterTbl.bCharHeight,	db	14
+	AT VideoParameterTbl.wBufferSize,	dw	1000h
+	AT VideoParameterTbl.baSeqRegs,		db	00h, 03h, 00h, 03h
+	AT VideoParameterTbl.bMiscOutputReg,	db	0A6h
+	AT VideoParameterTbl.baCRTCRegs,	db	5Fh, 4Fh, 50h, 82h, 55h
+						db	81h, 0BFh, 1Fh, 00h, 4Dh
+						db	0Bh, 0Ch, 00h, 00h, 00h
+						db	00h, 83h, 85h, 5Dh, 28h
+						db	0Dh, 63h, 0BAh, 0A3h, 0FFh
+	AT VideoParameterTbl.baAttrContRegs,	db	00h, 08h, 08h, 08h, 08h
+						db	08h, 08h, 08h, 10h, 18h
+						db	18h, 18h, 18h, 18h, 18h
+						db	18h, 0Eh, 00h, 0Fh, 08h
+	AT VideoParameterTbl.baGraphContRegs,	db	00h, 00h, 00h, 00h, 00h
+						db	10h, 0Ah, 00h, 0FFh
+iend
 
 LAB_522b:
 	dw	LAB_524a
