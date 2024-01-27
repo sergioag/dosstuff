@@ -1,10 +1,17 @@
 
+	%include "inc/config.inc"
+	%include "inc/macros.inc"
 	%include "inc/RamVars.inc"
 	%include "inc/RomVars.inc"
 	%include "inc/Ports.inc"
 	%include "inc/BiosSeg.inc"
 
-;	CPU 8086
+%ifdef V20
+	CPU 186
+%else
+	CPU 8086
+%endif
+
 	ORG 0
 	SECTION .text
 
@@ -47,7 +54,7 @@ LAB_0135:
 	mov	al,ah
 	or	al,33h
 LAB_013d:
-	shl	bx,1
+	SHL	bx,1
 	jnc	LAB_0143
 	or	al,8
 LAB_0143:
@@ -179,7 +186,7 @@ LAB_021a:
 	in	al,dx
 	rcl	al,1
 	rcl	bx,1
-	shr	al,1
+	SHR	al,1
 	loop	LAB_021a
 	pop	cx
 	ret
@@ -274,7 +281,7 @@ LAB_02c0:
 	mov	di,[CURR_PAGE_START]
 	mov	si,[NUM_COLUMNS]
 	mov	dx,si
-	shl	si,1
+	SHL	si,1
 	add	si,di
 	mov	al,[ROWS_MINUS_ONE]
 	mov	ah,[NUM_COLUMNS]
@@ -307,7 +314,7 @@ LAB_02f6:
 	jz	LAB_0319
 	cmp	[CURR_VIDEO_MODE],BYTE 13h
 	jnz	LAB_0319
-	shl	si,3
+	SHL	si,3
 	jmp	SHORT LAB_034e
 LAB_0319:
 	and	ah,0F7h
@@ -452,7 +459,7 @@ LAB_03ff:
 	push	dx
 	xchg	cx,bx
 	mov	cl,bl
-	shr	bx,3
+	SHR	bx,3
 	or	ch,ch
 	jnz	LAB_046f
 LAB_041e:
@@ -523,7 +530,7 @@ LAB_048a:
 	mov	ax,0A000h
 	mov	es,ax
 	mov	ax,[NUM_COLUMNS]
-	shl	ax,3
+	SHL	ax,3
 	mul	dx
 	add	ax,cx
 	adc	dl,0
@@ -560,7 +567,7 @@ LAB_04cb:
 	cs mov	es,[LAB_2555]
 	mov	al,bh
 	xor	ah,ah
-	shl	ax,1
+	SHL	ax,1
 	mov	di,ax
 	mov	ax,[di+CURSOR_POSN]
 	mov	di,ax
@@ -638,7 +645,7 @@ LAB_0559:
 	mul	WORD [CHAR_HEIGHT]
 	jnc	LAB_057e
 	mov	bh,dl
-	shl	bh,3
+	SHL	bh,3
 LAB_057e:
 	add	di,ax
 	mov	ax,8
@@ -685,7 +692,7 @@ LAB_05c2:
 	mov	ds,ax
 	mov	ax,[NUM_COLUMNS]
 	dec	ax
-	shl	ax,3
+	SHL	ax,3
 	add	di,ax
 	pop	ax
 	pop	ds
@@ -731,7 +738,7 @@ LAB_0612:
 	call	LAB_1427
 	test	bl,4
 	jnz	LAB_061d
-	shr	al,2
+	SHR	al,2
 LAB_061d:
 	mov	bx,0A000h
 	mov	es,bx
@@ -768,7 +775,7 @@ LAB_0655:
 	push	bx
 	mov	bh,ah
 	and	bh,18h
-	shr	bh,2
+	SHR	bh,2
 	mov	al,0Ah
 	call	ReadIndirectRegister
 	and	ah,0F9h
@@ -839,7 +846,7 @@ LAB_06b7:
 	call	WriteSequencerRegister
 	pop	ax
 	mov	bh,ah
-	shr	bh,2
+	SHR	bh,2
 	or	bh,bh
 	jz	LAB_06d6
 	dec	bh
@@ -1223,8 +1230,15 @@ WriteRegisterTable:
 
 LAB_08ec:
 	push	ds						; Save register
-	push	byte 0						; Address BIOS data segment
+%ifdef V20
+	push	BYTE 0						; Address BIOS data segment
 	pop	ds						; Set it
+%else
+	push	ax
+	xor	ax,ax
+	mov	ds,ax
+	pop	ax
+%endif
 	cmp	[CURR_VIDEO_MODE],BYTE 13h			; Is it 40x25/320x200 color?
 	pop	ds						; Restore register
 	ret							; Return to caller
@@ -1309,14 +1323,14 @@ LAB_094c:
 LAB_094f:
 	or	bh,bh
 	jz	LAB_095c
-	shl	al,1
+	SHL	al,1
 	mov	ah,0Ah
 	mov	bh,6
 	call	LAB_078b
 LAB_095c:
 	mov	al,0Ah
 	call	ReadSequencerRegister
-	shr	ah,1
+	SHR	ah,1
 	and	ah,3
 	xchg	al,ah
 	mov	ah,12h
@@ -1620,14 +1634,14 @@ LAB_0b61:
 
 LAB_0b71:
 	mov	si,LAB_0b61
-	shl	al,1
+	SHL	al,1
 	xor	ah,ah
 	add	si,ax
 	cs lodsb
 	push	ax
 	mov	al,0Ah
 	call	ReadSequencerRegister
-	shr	ah,2
+	SHR	ah,2
 	mov	cl,ah
 	and	cl,10h
 	pop	ax
@@ -1643,7 +1657,7 @@ LAB_0b90:
 LAB_0ba0:
 	push	ax
 	push	bx
-	shl	al,2
+	SHL	al,2
 	test	al,80h
 	jz	LAB_0bab
 	or	al,41h
@@ -1666,7 +1680,7 @@ LAB_0bb4:
 	shl	ah,cl
 	and	ah,30h
 	or	al,ah
-	shl	bh,2
+	SHL	bh,2
 	and	bh,0C0h
 	or	al,bh
 	mov	bh,0FFh
@@ -1717,7 +1731,7 @@ LAB_0c25:
 	pop	bx
 	mov	ch,al
 	and	ch,0F0h
-	shr	ch,1
+	SHR	ch,1
 	test	bh,80h
 	jz	LAB_0c3a
 	or	ch,80h
@@ -1727,7 +1741,7 @@ LAB_0c3a:
 	mov	cx,8
 	mov	si,LAB_0c1d
 	and	al,0FCh
-	shr	al,1
+	SHR	al,1
 	test	bh,80h
 	jz	LAB_0c50
 	or	al,80h
@@ -1742,7 +1756,7 @@ LAB_0c58:
 	and	bl,7
 	mov	cl,2
 	shl	bl,cl
-	shl	al,1
+	SHL	al,1
 	and	al,0Ch
 	inc	cx
 	shl	al,cl
@@ -1902,10 +1916,10 @@ LAB_0d14:
 	push	ax
 	push	dx
 	mov	ah,dl
-	shl	ah,2
+	SHL	ah,2
 	call	LAB_066b
 	jnz	LAB_0d23
-	shl	ah,2
+	SHL	ah,2
 LAB_0d23:
 	mov	al,9
 	mov	dx,INDEX_REG
@@ -2006,7 +2020,7 @@ LAB_0d9a:
 	mov	bl,[CURR_VIDEO_MODE]
 	cmp	bl,13h
 	ja	LAB_0dd4
-	shl	bx,1
+	SHL	bx,1
 	cs mov	bx,[bx+LAB_0f69]
 	mov	ah,bh
 	cmp	ah,0FFh
@@ -2036,7 +2050,7 @@ LAB_0dd6:
 	ja	LAB_0e2c
 	xor	bx,bx
 	mov	bl,al
-	shl	bx,1
+	SHL	bx,1
 	cs mov	bx,[bx+LAB_0f69]
 	cmp	bh,0FFh
 	jc	LAB_0e14
@@ -2049,7 +2063,7 @@ LAB_0dd6:
 	jz	LAB_0e14
 	mov	bh,al
 	sub	bl,bh
-	shr	bh,1
+	SHR	bh,1
 	add	bl,4
 	add	bl,bh
 	jmp	SHORT LAB_0e14
@@ -2177,7 +2191,7 @@ LAB_0efe:
 	mov	al,9
 	call	ReadSequencerRegister
 	mov	al,ah
-	shr	al,1
+	SHR	al,1
 	push	ax
 	mov	al,0Ah
 	call	ReadSequencerRegister
@@ -3081,7 +3095,7 @@ LAB_1fce:
 	ja	LAB_1fde
 	cbw
 	mov	si,ax
-	shl	si,1
+	SHL	si,1
 	cs call	[si+LAB_1fb0]
 	jmp	SHORT LAB_1fe0
 
@@ -3207,7 +3221,7 @@ LAB_20d8:
 	mov	[di+1Eh],BYTE 1
 	cbw
 	mov	bx,ax
-	shl	bx,1
+	SHL	bx,1
 	cs jmp	[bx+LAB_20f7]
 
 LAB_20f7:
@@ -3240,7 +3254,7 @@ LAB_2128:
 	xor	ah,ah
 	mov	[di+14h],ax
 	mov	ax,[di+12h]
-	shl	ax,1
+	SHL	ax,1
 	mov	[di+10h],ax
 	mov	bx,ax
 	mov	ax,8000h
@@ -3252,7 +3266,7 @@ LAB_2128:
 
 LAB_2161:
 	mov	ax,[di+12h]
-	shr	ax,3
+	SHR	ax,3
 	mov	[di+10h],ax
 	call	LAB_21e9
 	call	LAB_21f5
@@ -3268,7 +3282,7 @@ LAB_2176:
 
 LAB_2184:
 	mov	ax,[di+12h]
-	shl	ax,1
+	SHL	ax,1
 	cmp	[di+19h],BYTE 18h
 	jnz	LAB_2192
 	mov	ax,800h
@@ -3317,7 +3331,7 @@ LAB_21e9:
 	ret
 
 LAB_21f5:
-	shl	bx,2
+	SHL	bx,2
 LAB_21f8:
 	div	bx
 	xor	dx,dx
@@ -3368,7 +3382,7 @@ LAB_224b:
 	push	cx
 	mov	al,cl
 	and	al,8
-	shr	al,3
+	SHR	al,3
 	or	cl,al
 	push	es
 	and	cx,BYTE -9
@@ -3470,19 +3484,19 @@ LAB_22f0:
 LAB_22f2:
 	mov	ax,cx
 	add	ax,0Fh
-	shr	ax,1
+	SHR	ax,1
 	call	LAB_2334
 LAB_22fc:
 	mov	bl,bh
 	xor	bh,bh
-	shl	bx,1
+	SHL	bx,1
 	push	bx
 	push	bx
-	shl	bx,3
+	SHL	bx,3
 	mov	cx,bx
 	pop	bx
 	call	LAB_233f
-	shr	dx,2
+	SHR	dx,2
 	pop	bx
 	jmp	SHORT LAB_2327
 LAB_2313:
@@ -3492,7 +3506,7 @@ LAB_2313:
 LAB_231b:
 	mov	bl,bh
 	xor	bh,bh
-	shl	bx,3
+	SHL	bx,3
 	mov	cx,bx
 	call	LAB_233f
 LAB_2327:
@@ -3504,7 +3518,7 @@ LAB_2333:
 	ret
 
 LAB_2334:
-	shr	ax,3
+	SHR	ax,3
 	mov	ah,al
 	mov	bh,ah
 	mov	al,13h
@@ -3574,16 +3588,16 @@ LAB_238c:
 	jz	LAB_23a9
 	or	ah,1
 LAB_23a9:
-	shl	ax,1
+	SHL	ax,1
 	push	dx
 	mul	bx
 	mov	si,dx
 	pop	dx
 	push	cx
-	shr	cx,2
+	SHR	cx,2
 	cmp	bp,BYTE 1
 	jnz	LAB_23bc
-	shr	cx,1
+	SHR	cx,1
 LAB_23bc:
 	add	ax,cx
 	adc	si,BYTE 0
@@ -3599,7 +3613,7 @@ LAB_23c9:
 	mov	ax,si
 	mov	bh,al
 	and	bh,2
-	shl	bh,1
+	SHL	bh,1
 	and	al,1
 	or	bh,al
 	mov	al,1Bh
@@ -3616,7 +3630,7 @@ LAB_23e6:
 	call	LAB_238c
 	pop	bp
 	and	cl,3
-	shl	cl,1
+	SHL	cl,1
 	jmp	SHORT LAB_2380
 
 LAB_23f7:
@@ -3634,7 +3648,7 @@ LAB_23f7:
 	jz	LAB_2413
 	or	ah,1
 LAB_2413:
-	shl	ax,1
+	SHL	ax,1
 	mov	cx,ax
 	mov	al,0Ch
 	call	ReadIndirectRegister
@@ -3657,14 +3671,14 @@ LAB_2435:
 LAB_2438:
 	call	LAB_2461
 	push	ax
-	shl	cx,1
+	SHL	cx,1
 	call	LAB_247c
 	jmp	SHORT LAB_244c
 LAB_2443:
 	call	LAB_2461
 	push	ax
 	call	LAB_247c
-	shr	ah,1
+	SHR	ah,1
 LAB_244c:
 	add	cl,ah
 	adc	ch,0
@@ -3684,7 +3698,7 @@ LAB_2461:
 	call	ReadIndirectRegister
 	mov	al,ah
 	and	ax,401h
-	shr	ah,1
+	SHR	ah,1
 	or	al,ah
 	xor	ah,ah
 	mov	dx,ax
@@ -3695,7 +3709,7 @@ LAB_2461:
 	ret
 
 LAB_247c:
-	shl	cx,2
+	SHL	cx,2
 	add	dl,6
 	in	al,dx
 	mov	bl,dl
@@ -4536,7 +4550,7 @@ LAB_293d:
 	xor	ah,ah
 	cmp	al,1Dh
 	jnc	LAB_29bb
-	shl	ax,1
+	SHL	ax,1
 	xchg	ax,si
 	cs call	[si+LAB_28f6]
 LAB_2990:
@@ -4981,8 +4995,8 @@ LAB_2d56:
 	jnz	LAB_2d69
 	dec	bl
 LAB_2d69:
-	shr	bl,1
-	shl	bl,4
+	SHR	bl,1
+	SHL	bl,4
 	add	si,bx
 	mov	cx,10h
 LAB_2d73:
@@ -5458,7 +5472,7 @@ LAB_30f5:
 LAB_3100:
 	mov	cl,bl
 	mov	ch,bh
-	shr	ch,1
+	SHR	ch,1
 	jmp	SHORT LAB_30f5
 LAB_3108:
 	cmp	bh,0Eh
@@ -5474,7 +5488,7 @@ LAB_3117:
 	mov	al,bh
 	xchg	bh,bl
 	xor	bh,bh
-	shl	bx,1
+	SHL	bx,1
 	mov	[bx+CURSOR_POSN],dx
 	cmp	[CURR_PAGE],al
 	jnz	LAB_3149
@@ -5484,7 +5498,7 @@ LAB_3129:
 	add	al,dl
 	adc	ah,0
 	mov	bx,[CURR_PAGE_START]
-	shr	bx,1
+	SHR	bx,1
 	add	bx,ax
 	mov	al,0Eh
 	mov	dx,[CRTC_BASE]
@@ -5528,7 +5542,7 @@ LAB_3165:
 	test	al,1
 	jz	LAB_318b
 LAB_3189:
-	shr	bx,1
+	SHR	bx,1
 LAB_318b:
 	mov	dx,[CRTC_BASE]
 	mov	al,0Ch
@@ -5537,7 +5551,7 @@ LAB_318b:
 	mov	ah,bl
 	inc	al
 	out	dx,ax
-	shl	di,1
+	SHL	di,1
 	mov	dx,[di+CURSOR_POSN]
 	jmp	SHORT LAB_3129
 
@@ -5565,9 +5579,9 @@ LAB_31c2:
 	mul	BYTE [NUM_COLUMNS]
 	mul	WORD [CHAR_HEIGHT]
 	add	di,ax
-	shl	di,1
-	shl	di,1
-	shl	di,1
+	SHL	di,1
+	SHL	di,1
+	SHL	di,1
 	pop	dx
 	mov	ax,cx
 	jmp	LAB_358f
@@ -5646,16 +5660,16 @@ LAB_3267:
 	add	al,cl
 	adc	ah,0
 	mov	di,[CURR_PAGE_START]
-	shr	di,1
+	SHR	di,1
 	add	di,ax
 	mov	al,bl
-	shl	di,1
+	SHL	di,1
 	mov	si,di
 	mov	bx,[NUM_COLUMNS]
 	mul	bl
 	push	ax
-	shl	ax,1
-	shl	bx,1
+	SHL	ax,1
+	SHL	bx,1
 	cmp	[bp+1],BYTE 6
 	jz	LAB_3297
 	neg	ax
@@ -5714,8 +5728,8 @@ LAB_32e5:
 LAB_32e9:
 	cmp	ah,6
 	jz	LAB_32f2
-	shl	cl,1
-	shl	dl,1
+	SHL	cl,1
+	SHL	dl,1
 LAB_32f2:
 	mov	si,dx
 	mov	bl,al
@@ -5751,12 +5765,12 @@ LAB_32f2:
 	mov	ds,ax
 	or	dh,dh
 	jz	LAB_336d
-	shl	dh,1
-	shl	dh,1
+	SHL	dh,1
+	SHL	dh,1
 	mov	ax,cx
 LAB_3343:
 	mov	cx,ax
-	shr	cx,1
+	SHR	cx,1
 	rep movsw
 	rcl	cx,1
 	rep movsb
@@ -5765,7 +5779,7 @@ LAB_3343:
 	add	si,bp
 	add	di,bp
 	mov	cx,ax
-	shr	cx,1
+	SHR	cx,1
 	rep movsw
 	rcl	cx,1
 	rep movsb
@@ -5779,19 +5793,19 @@ LAB_3343:
 LAB_336d:
 	pop	ax
 	mov	al,ah
-	shl	dl,1
-	shl	dl,1
+	SHL	dl,1
+	SHL	dl,1
 	mov	si,cx
 LAB_3376:
 	mov	cx,si
-	shr	cx,1
+	SHR	cx,1
 	rep stosw
 	rcl	cx,1
 	rep stosb
 	sub	di,si
 	add	di,bp
 	mov	cx,si
-	shr	cx,1
+	SHR	cx,1
 	rep	stosw
 	rcl	cx,1
 	rep	stosb
@@ -5822,12 +5836,12 @@ LAB_33ac:
 	mov	ds,ax
 	or	dh,dh
 	jz	LAB_33f9
-	shl	dh,1
-	shl	dh,1
+	SHL	dh,1
+	SHL	dh,1
 	mov	ax,cx
 LAB_33c5:
 	mov	cx,ax
-	shr	cx,1
+	SHR	cx,1
 	jnc	LAB_33cc
 	movsb
 LAB_33cc:
@@ -5843,7 +5857,7 @@ LAB_33d4:
 	add	si,bp
 	add	di,bp
 	mov	cx,ax
-	shr	cx,1
+	SHR	cx,1
 	jnc	LAB_33e3
 	movsb
 LAB_33e3:
@@ -5864,12 +5878,12 @@ LAB_33eb:
 LAB_33f9:
 	pop	ax
 	mov	al,ah
-	shl	dl,1
-	shl	dl,1
+	SHL	dl,1
+	SHL	dl,1
 	mov	si,cx
 LAB_3402:
 	mov	cx,si
-	shr	cx,1
+	SHR	cx,1
 	jnc	LAB_3409
 	stosb
 LAB_3409:
@@ -5881,7 +5895,7 @@ LAB_340f:
 	add	di,si
 	add	di,bp
 	mov	cx,si
-	shr	cx,1
+	SHR	cx,1
 	jnc	LAB_341a
 	stosb
 LAB_341a:
@@ -6066,9 +6080,9 @@ LAB_3563:
 	mov	ax,[NUM_COLUMNS]
 	mul	bx
 	add	di,ax
-	shl	di,1
-	shl	di,1
-	shl	di,1
+	SHL	di,1
+	SHL	di,1
+	SHL	di,1
 	add	di,BYTE 6
 	pop	dx
 LAB_358f:
@@ -6091,9 +6105,9 @@ LAB_35a6:
 	mul	bl
 	mul	WORD [CHAR_HEIGHT]
 	mov	dx,si
-	shl	ax,1
-	shl	ax,1
-	shl	ax,1
+	SHL	ax,1
+	SHL	ax,1
+	SHL	ax,1
 	push	ax
 	sub	bl,dl
 	sbb	bh,0
@@ -6108,11 +6122,11 @@ LAB_35cb:
 	add	si,ax
 	pop	ax
 	pop	dx
-	shl	bx,1
-	shl	bx,1
-	shl	bx,1
-	shl	cx,1
-	shl	cx,1
+	SHL	bx,1
+	SHL	bx,1
+	SHL	bx,1
+	SHL	cx,1
+	SHL	cx,1
 	mov	al,[CHAR_HEIGHT]
 	mul	dh
 	push	dx
@@ -6202,7 +6216,7 @@ LAB_3672:
 	mul	bh
 	xor	bh,bh
 	add	bx,ax
-	shl	bx,1
+	SHL	bx,1
 	es mov	ax,[bx]
 LAB_3688:
 	ret
@@ -6216,15 +6230,15 @@ LAB_3690:
 	mov	al,[CURSOR_POSN+1]
 	mul	BYTE [NUM_COLUMNS]
 	mov	di,ax
-	shl	di,1
-	shl	di,1
+	SHL	di,1
+	SHL	di,1
 	mov	al,[CURSOR_POSN]
 	xor	ah,ah
 	add	di,ax
 	mov	ah,[CURR_VIDEO_MODE]
 	cmp	ah,6
 	jz	LAB_36af
-	shl	di,1
+	SHL	di,1
 LAB_36af:
 	add	di,20F0h
 	cmp	ah,6
@@ -6279,7 +6293,7 @@ LAB_371d:
 	mov	es,ax
 	mov	al,bh
 	xor	ah,ah
-	shl	ax,1
+	SHL	ax,1
 	mov	si,ax
 	mov	ax,[si+CURSOR_POSN]
 	mov	si,ax
@@ -6347,9 +6361,9 @@ LAB_37a8:
 	mul	BYTE [NUM_COLUMNS]
 	mul	WORD [CHAR_HEIGHT]
 	add	di,ax
-	shl	di,1
-	shl	di,1
-	shl	di,1
+	SHL	di,1
+	SHL	di,1
+	SHL	di,1
 	mov	al,[CHAR_HEIGHT]
 	dec	al
 	mul	BYTE [NUM_COLUMNS]
@@ -6400,12 +6414,12 @@ LAB_3827:
 	lodsw
 	xchg	ah,al
 LAB_382e:
-	shl	ax,1
+	SHL	ax,1
 	jns	LAB_3833
 	stc
 LAB_3833:
 	rcl	bl,1
-	shl	ax,1
+	SHL	ax,1
 	dec	dl
 	jnz	LAB_382e
 	ret
@@ -6442,17 +6456,17 @@ LAB_3864:
 	mov	bl,bh
 	xor	bh,bh
 	mov	ax,[PAGE_SIZE]
-	shr	ax,1
+	SHR	ax,1
 	mul	bx
 	mov	dx,ax
-	shl	bx,1
+	SHL	bx,1
 	mov	bx,[bx+CURSOR_POSN]
 	mov	al,[NUM_COLUMNS]
 	mul	bh
 	add	ax,dx
 	xor	bh,bh
 	add	ax,bx
-	shl	ax,1
+	SHL	ax,1
 	xchg	ax,di
 	ret
 
@@ -6500,7 +6514,7 @@ LAB_38d0:
 	mul	bh
 	xor	bh,bh
 	add	ax,bx
-	shl	ax,1
+	SHL	ax,1
 	xchg	ax,di
 	rep stosw
 LAB_38ea:
@@ -6550,7 +6564,7 @@ LAB_392c:
 	mul	bh
 	xor	bh,bh
 	add	ax,bx
-	shl	ax,1
+	SHL	ax,1
 	xchg	ax,di
 LAB_3942:
 	stosb
@@ -6568,14 +6582,14 @@ LAB_394c:
 	mov	al,[CURSOR_POSN+1]
 	mul	BYTE [NUM_COLUMNS]
 	mov	di,ax
-	shl	di,1
-	shl	di,1
+	SHL	di,1
+	SHL	di,1
 	mov	al,[CURSOR_POSN]
 	xor	ah,ah
 	add	di,ax
 	cmp	dh,6
 	jz	LAB_3969
-	shl	di,1
+	SHL	di,1
 LAB_3969:
 	mov	al,dl
 	cs mov	ds,[LAB_2553]
@@ -6588,9 +6602,9 @@ LAB_397c:
 	lds	si,[INT_OFF_VAL(43h)]
 LAB_3980:
 	xor	ah,ah
-	shl	ax,1
-	shl	ax,1
-	shl	ax,1
+	SHL	ax,1
+	SHL	ax,1
+	SHL	ax,1
 	add	si,ax
 	cmp	dh,6
 	jnz	LAB_39d7
@@ -6655,7 +6669,7 @@ LAB_3a04:
 	cs mov	es,[LAB_2555]
 	mov	al,bh
 	xor	ah,ah
-	shl	ax,1
+	SHL	ax,1
 	mov	di,ax
 	mov	ax,[di+CURSOR_POSN]
 	mov	di,ax
@@ -6758,9 +6772,9 @@ LAB_3abb:
 	mul	ah
 	mul	WORD [CHAR_HEIGHT]
 	add	di,ax
-	shl	di,1
-	shl	di,1
-	shl	di,1
+	SHL	di,1
+	SHL	di,1
+	SHL	di,1
 	mov	ax,[CHAR_HEIGHT]
 	mov	dx,ax
 	mul	cl
@@ -6869,7 +6883,7 @@ LAB_3b9a:
 	mov	[CGA_PALETTE_REG],ah
 	mov	al,[bp+0Eh]
 	and	al,8
-	shl	al,1
+	SHL	al,1
 	and	bh,7
 	or	bh,al
 	mov	bl,11h
@@ -7019,9 +7033,9 @@ LAB_3c9b:
 	push	dx
 	xchg	cx,bx
 	mov	cl,bl
-	shr	bx,1
-	shr	bx,1
-	shr	bx,1
+	SHR	bx,1
+	SHR	bx,1
+	SHR	bx,1
 	or	ch,ch
 	jnz	LAB_3cf7
 LAB_3cac:
@@ -7136,9 +7150,9 @@ LAB_3d65:
 	push	cx
 	push	dx
 	mov	si,cx
-	shr	si,1
-	shr	si,1
-	shr	si,1
+	SHR	si,1
+	SHR	si,1
+	SHR	si,1
 	or	bh,bh
 	jnz	LAB_3da7
 LAB_3d75:
@@ -7189,17 +7203,17 @@ LAB_3dc1:
 	not	al
 	cmp	[CURR_VIDEO_MODE],BYTE 6
 	jc	LAB_3dd6
-	shr	cx,1
+	SHR	cx,1
 	mov	ah,0FEh
 	and	al,7
 	jmp	SHORT LAB_3ddc
 LAB_3dd6:
 	mov	ah,0FCh
-	shl	al,1
+	SHL	al,1
 	and	al,6
 LAB_3ddc:
-	shr	cx,1
-	shr	cx,1
+	SHR	cx,1
+	SHR	cx,1
 	add	di,cx
 	mov	cl,al
 	rol	ah,cl
@@ -7230,7 +7244,7 @@ LAB_3e0a:
 	mov	cl,[CURR_PAGE]
 	xor	ch,ch
 	mov	di,cx
-	shl	di,1
+	SHL	di,1
 	mov	bh,cl
 	mov	dx,[di+CURSOR_POSN]
 	cmp	al,0Dh
@@ -7397,7 +7411,7 @@ LAB_3f40:
 	cmp	al,1Bh
 	ja	LAB_3f57
 	xor	ah,ah
-	shl	ax,1
+	SHL	ax,1
 	mov	si,ax
 	cs jmp	word [si+LAB_3f08]
 
@@ -7504,7 +7518,7 @@ LAB_3fea:
 	test	bh,80h
 	jnz	LAB_4002
 	and	al,3
-	shl	al,2
+	SHL	al,2
 LAB_4002:
 	mov	bl,14h
 	mov	bh,al
@@ -7568,7 +7582,7 @@ LAB_4052:
 	test	bh,80h
 	jnz	LAB_406d
 	mov	bl,0
-	shr	cl,2
+	SHR	cl,2
 LAB_406d:
 	mov	bh,cl
 	mov	[bp+0Eh],bx
@@ -7715,13 +7729,13 @@ LAB_4153:
 	mov	ah,al
 	and	al,0Fh
 	and	ah,30h
-	shr	ah,1
+	SHR	ah,1
 	or	al,ah
 	cmp	al,19h
 	jnc	LAB_416d
 	mov	ah,0
 	mov	di,ax
-	shl	di,1
+	SHL	di,1
 	cs jmp	[di+LAB_411b]
 LAB_416d:
 	ret
@@ -7792,17 +7806,17 @@ LAB_41cc:
 	mov	al,7
 	call	ReadIndirectRegister
 	and	ah,8
-	shr	ah,3
+	SHR	ah,3
 	mov	bh,ah
 	mov	al,9
 	call	ReadIndirectRegister
 	mov	cl,ah
 	and	ah,20h
-	shr	ah,4
+	SHR	ah,4
 	or	bh,ah
 	test	cl,80h
 	jz	LAB_41fd
-	shr	bx,1
+	SHR	bx,1
 LAB_41fd:
 	mov	cx,bx
 	mov	bx,0C8h
@@ -7826,7 +7840,7 @@ LAB_4225:
 	mov	[ROWS_MINUS_ONE],al
 	inc	al
 	mov	cx,[NUM_COLUMNS]
-	shl	cx,1
+	SHL	cx,1
 	xor	ah,ah
 	mul	cx
 	add	ax,100h
@@ -7865,7 +7879,7 @@ LAB_4276:
 	mul	BYTE [CHAR_HEIGHT]
 	cmp	bx,0C8h
 	jnz	LAB_4295
-	shl	ax,1
+	SHL	ax,1
 LAB_4295:
 	dec	ax
 	mov	ah,al
@@ -8006,7 +8020,7 @@ LAB_4389:
 	cmp	bl,6
 	ja	LAB_43aa
 	xor	bh,bh
-	shl	bx,1
+	SHL	bx,1
 	mov	[bp+10h],BYTE 12h
 LAB_43a5:
 	cs jmp	WORD [bx+LAB_436e]
@@ -8025,7 +8039,7 @@ LAB_43ae:
 	and	cl,0Fh
 	mov	[bp+0Ch],cx
 	mov	al,[VIDEO_CONTROL]
-	shr	al,1
+	SHR	al,1
 	and	al,1
 	mov	[bp+0Fh],al
 	mov	al,[VIDEO_CONTROL]
@@ -8068,7 +8082,7 @@ LAB_4407:
 	jnz	LAB_4433
 	mov	bl,al
 	xor	bh,bh
-	shl	bx,3
+	SHL	bx,3
 	mov	si,bx
 	mov	bl,[VIDEO_CONTROL]
 	and	bl,2
@@ -8076,7 +8090,7 @@ LAB_4407:
 	and	al,1
 	or	bl,al
 	and	bl,3
-	shl	bx,1
+	SHL	bx,1
 	cs jmp	WORD [bx+si+LAB_43ef]
 
 LAB_4433:
@@ -8222,7 +8236,7 @@ LAB_4549:
 	ja	LAB_456d
 	mov	bl,al
 	xor	bh,bh
-	shl	bx,1
+	SHL	bx,1
 LAB_4557:
 	cs jmp	WORD [bx+LAB_4541]
 
@@ -8265,7 +8279,7 @@ LAB_4598:
 
 LAB_459d:
 	push	ds
-	pusha
+	PUSHA
 	cs mov	ds,[LAB_2551]
 	mov	al,1
 	cmp	[PRINT_SCREEN_STAT],al
@@ -8325,7 +8339,7 @@ LAB_460c:
 LAB_4615:
 	mov	[PRINT_SCREEN_STAT],cl
 LAB_4619:
-	popa
+	POPA
 	pop	ds
 	iret
 
@@ -8353,7 +8367,7 @@ LAB_462e:
 	jnz	LAB_464a
 	mov	bl,ah
 	xor	bh,bh
-	shl	bx,1
+	SHL	bx,1
 	mov	dx,[bx+CURSOR_POSN]
 	push	dx
 LAB_464a:
@@ -8419,7 +8433,7 @@ LAB_46b6:
 	call	LAB_3e20
 	mov	bl,[bp+0Fh]
 	xor	bh,bh
-	shl	bx,1
+	SHL	bx,1
 	mov	dx,[bx+CURSOR_POSN]
 LAB_46c7:
 	pop	si
@@ -8435,10 +8449,10 @@ LAB_46d2:
 	xchg	[CURR_PAGE],bh
 	mov	bl,[CURR_PAGE]
 	xor	bh,bh
-	shl	bx,1
+	SHL	bx,1
 	mov	dx,[bx+CURSOR_POSN]
 	mov	bh,bl
-	shr	bh,1
+	SHR	bh,1
 	call	LAB_3117
 	ret
 
@@ -8518,7 +8532,7 @@ LAB_4769:
 	es cmp	al,[bx]
 	jnc	LAB_4793
 	xor	ah,ah
-	shl	ax,1
+	SHL	ax,1
 	add	ax,4
 	mov	si,ax
 	es mov	cx,[bx+si]
@@ -8559,11 +8573,11 @@ LAB_47dd:
 	stosw
 	mov	al,[CURR_VIDEO_MODE]
 	xor	ah,ah
-	shl	ax,1
+	SHL	ax,1
 	mov	bx,ax
 	cs mov	ax,[bx+LAB_4798]
 	stosw
-	shr	bx,1
+	SHR	bx,1
 	cs mov	al,[bx+LAB_47c0]
 	stosb
 	mov	bl,3
@@ -8617,7 +8631,7 @@ LAB_487f:
 	stosb
 	mov	al,ah
 	and	al,0Ch
-	shr	al,2
+	SHR	al,2
 	test	ah,20h
 	jz	LAB_488e
 	or	al,4
@@ -8627,7 +8641,7 @@ LAB_488e:
 	call	LAB_4083
 	mov	al,bh
 	and	al,8
-	shl	al,2
+	SHL	al,2
 	mov	cl,4
 	mov	ah,[VIDEO_MODE_CONTROL]
 	and	ah,0Fh
@@ -8855,7 +8869,7 @@ LAB_4a30:
 	ret
 
 LAB_4a35:
-	pusha
+	PUSHA
 	push	ds
 	push	es
 	call	DisableVideo
@@ -8900,7 +8914,7 @@ LAB_4a54:
 	jnc	LAB_4a88
 	add	bl,10h
 LAB_4a88:
-	shl	bl,1
+	SHL	bl,1
 	mov	ah,bl
 	mov	al,0
 	mov	di,ax
@@ -8949,7 +8963,7 @@ LAB_4ab9:
 LAB_4ae1:
 	out	dx,ax
 	call	LAB_4b25
-	popa
+	POPA
 	ret
 
 LAB_4ae7:
@@ -8974,7 +8988,7 @@ LAB_4b06:
 	or	ah,ah
 	jz	LAB_4b1f
 	xor	al,al
-	shr	ax,3
+	SHR	ax,3
 	mov	di,ax
 	push	cx
 	pushf
@@ -9840,7 +9854,7 @@ LAB_5239:
 	mov	al,bl
 	cbw
 	mov	si,ax
-	shl	si,1
+	SHL	si,1
 	add	si,522Bh
 	cs call	[si]
 	jmp	LAB_1fe0
@@ -9919,7 +9933,7 @@ LAB_52b6:
 LAB_52ba:
 	call	LAB_52d2
 	in	al,dx
-	shr	al,1
+	SHR	al,1
 	and	al,3
 	mov	bh,al
 	cmp	bh,3
