@@ -99,7 +99,7 @@ while( ($n = read( FILE, $d, 1 )) != 0 )
 }
 $cs == 0 || die "Checksum verification failed\n";
 
-print "checksum: ".$ARGV[0].": $oldBytes bytes before, $newBytes bytes after\n";
+print "checksum: ".$ARGV[0].": $oldBytes bytes before, $newBytes bytes after, checksum = $fixl\n";
 
 __DATA__
 :endofperl
