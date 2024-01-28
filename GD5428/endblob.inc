@@ -79,6 +79,8 @@ LAB_56eb:
 	%include "inc/font8x8.inc"
 	%include "inc/font8x14.inc"
 
+	; Seems like a 8x14 font with an additional random line on top, effectively making it 8x15
+	; Still, the characters are not following an ASCII standard sequence
 LAB_6d6b:
 	db	1Dh, 00h, 00h, 00h, 00h, 24h, 66h, 0FFh, 66h
 	db	24h, 00h, 00h, 00h, 00h, 00h, 22h, 00h, 63h, 63h, 63h, 22h, 00h, 00h, 00h, 00h
