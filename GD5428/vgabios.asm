@@ -1,3 +1,36 @@
+; BIOS for Cirrus Logic CL-GD5428
+; Copyright (c) 2023, Sergio Aguayo
+;
+; Redistribution and use in source and binary forms, with or without
+; modification, are permitted provided that the following conditions are met:
+;
+; 1. Redistributions of source code must retain the above copyright notice, this
+;    list of conditions and the following disclaimer.
+;
+; 2. Redistributions in binary form must reproduce the above copyright notice,
+;    this list of conditions and the following disclaimer in the documentation
+;    and/or other materials provided with the distribution.
+;
+; 3. Neither the name of the copyright holder nor the names of its
+;    contributors may be used to endorse or promote products derived from
+;    this software without specific prior written permission.
+;
+; THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+; IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+; DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+; FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+; DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+; SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+; CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+; OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+; OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+;
+; EEPROM Format (in 16-bit words):
+; 0: Magic number (must be 434Ch)
+; 1: High part is loaded into SRA, low part into SR9
+;
 
 	%include "inc/config.inc"
 	%include "inc/macros.inc"
@@ -48,179 +81,8 @@ LAB_0132:
 LAB_0134:
 	db	0
 
-LAB_0135:
-	push	cx
-	mov	cx,0Ah
-	mov	al,ah
-	or	al,33h
-LAB_013d:
-	SHL	bx,1
-	jnc	LAB_0143
-	or	al,8
-LAB_0143:
-	call	LAB_020d
-	or	al,4
-	call	LAB_020d
-	and	al,0F3h
-	loop	LAB_013d
-	pop	cx
-	ret
-
-LAB_0151:
-	cs test	[1036h],BYTE 80h
-	jnz	LAB_016a
-	push	bx
-	mov	bx,434Ch
-	mov	ax,5000h
-	call	LAB_01d7
-	pop	bx
-	mov	ax,5040h
-	call	LAB_01d7
-LAB_016a:
-	ret
-
-LAB_016b:
-	push	cx
-	mov	cx,10h
-LAB_016f:
-	and	al,0F3h
-	rcl	bx,1
-	jnc	LAB_0177
-	or	al,8
-LAB_0177:
-	call	LAB_020d
-	or	al,4
-	call	LAB_020d
-	in	al,dx
-	loop	LAB_016f
-	pop	cx
-	ret
-
-LAB_0184:
-	cs test	[1036h],BYTE 80h
-	jnz	LAB_01d1
-	call	LAB_0233
-	mov	bx,6000h
-	call	LAB_0135
-	call	LAB_0216
-	push	bx
-	call	LAB_024d
-	call	LAB_0233
-	mov	bx,6040h
-	call	LAB_0135
-	call	LAB_0216
-	push	bx
-	call	LAB_024d
-	pop	bx
-	pop	ax
-	cmp	ax,434Ch
-	jnz	LAB_01d1
-	mov	dx,3C4h
-	mov	al,9
-	call	ReadIndirectRegister
-	and	bl,0FCh
-	and	ah,3
-	or	ah,bl
-	out	dx,ax
-	inc	ax
-	call	ReadIndirectRegister
-	and	ah,0BFh
-	and	bh,40h
-	or	ah,bh
-	out	dx,ax
-LAB_01d1:
-	mov	ax,448Eh
-	int	15h
-	ret
-
-LAB_01d7:
-	push	cx
-	push	bx
-	push	ax
-	call	LAB_0233
-	mov	bx,4C00h
-	call	LAB_0135
-	call	LAB_01fd
-	pop	bx
-	call	LAB_0135
-	pop	bx
-	call	LAB_016b
-	call	LAB_01fd
-	xor	cx,cx
-LAB_01f3:
-	in	al,dx
-	test	al,80h
-	loopz	LAB_01f3
-	call	LAB_024d
-	pop	cx
-	ret
-
-LAB_01fd:
-	and	al,0F3h
-	call	LAB_020d
-	and	al,0FEh
-	call	LAB_020d
-	or	al,1
-	call	LAB_020d
-	ret
-
-LAB_020d:
-	push	cx
-	mov	cx,10h
-LAB_0211:
-	out	dx,al
-	loop	LAB_0211
-	pop	cx
-	ret
-
-LAB_0216:
-	push	cx
-	mov	cx,10h
-LAB_021a:
-	mov	al,ah
-	and	al,40h
-	or	al,33h
-	call	LAB_020d
-	or	al,4
-	call	LAB_020d
-	in	al,dx
-	rcl	al,1
-	rcl	bx,1
-	SHR	al,1
-	loop	LAB_021a
-	pop	cx
-	ret
-
-LAB_0233:
-	mov	dx,3C4h
-	mov	al,8
-	out	dx,al
-	inc	dx
-	in	al,dx
-	mov	ah,al
-	or	al,20h
-	call	LAB_020d
-	or	al,12h
-	call	LAB_020d
-	or	al,1
-	call	LAB_020d
-	ret
-
-LAB_024d:
-	mov	al,ah
-	and	al,40h
-	or	al,33h
-	call	LAB_020d
-	and	al,0FEh
-	call	LAB_020d
-	call	LAB_020d
-	and	al,0EDh
-	call	LAB_020d
-	and	al,0DFh
-	call	LAB_020d
-	mov	al,ah
-	out	dx,al
-	ret
+	; Include EEPROM routines
+	%include "inc/eeprom.inc"
 
 LAB_026c:
 	mov	al,17h				; Read SR17 register
@@ -987,7 +849,7 @@ LAB_079c:
 	mov	al,0Ah
 	call	ReadSequencerRegister
 	mov	bh,ah
-	call	LAB_0151
+	call	SaveConfigToEEPROM
 	pop	dx
 	pop	bx
 	ret
@@ -2349,6 +2211,21 @@ LAB_0fd2:
 	db	0A0h,00h,0FFh
 LAB_1035:
 	db	0A0h
+
+;-------------------------------------------------------------------------------
+; FeatureEnable
+;-------------------------------------------------------------------------------
+; This byte indicates if a certain feature is enabled.
+;
+; Bit 7: EEPROM support. 1 = disabled, 0 = ENABLED.
+; Bit 6: ???
+; Bit 5: ???
+; Bit 4: ???
+; Bit 3: ???
+; Bit 2: ???
+; Bit 1: ???
+; Bit 0: ???
+;-------------------------------------------------------------------------------
 LAB_1036:
 	db	00h
 LAB_1037:
@@ -2862,13 +2739,115 @@ LAB_1427:
 	ret
 
 LAB_1442:
-	db	14h, 00h, 00h, 20h, 04h, 90h, 01h, 04h, 08h, 10h, 00h, 0Eh, 0F2h, 6Fh, 0FFh, 01h
-	db	04h, 00h, 00h, 00h, 00h, 46h, 00h, 00h, 5Ah, 3Eh, 00h, 00h, 00h, 00h, 00h, 08h
-	db	08h, 54h, 0Ah, 01h, 20h, 04h, 5Eh, 01h, 04h, 08h, 08h, 00h, 0Eh, 0F3h, 0AFh, 0FFh
-	db	01h, 04h, 00h, 00h, 00h, 00h, 46h, 00h, 00h, 5Ah, 3Eh, 00h, 00h, 00h, 00h, 00h
-	db	08h, 08h, 55h, 09h, 01h, 20h, 04h, 5Eh, 01h, 04h, 08h, 0Eh, 00h, 0Eh, 0F4h, 0AFh
-	db	0FFh, 01h, 04h, 00h, 00h, 00h, 00h, 46h, 00h, 00h, 5Ah, 3Eh, 00h, 00h, 00h, 00h
-	db	00h, 08h, 08h, 5Ch, 03h, 01h, 20h, 03h, 58h, 02h, 08h, 08h, 10h, 04h, 1Eh, 0E5h
+;istruc SuppParameterTbl
+;	AT SuppParameterTbl.bModeNumber,	db	
+;	AT SuppParameterTbl.wVESAModeNumber,	dw	
+;	AT SuppParameterTbl.wHorzRes,		dw	
+;	AT SuppParameterTbl.wVertRes,		dw	
+;	AT SuppParameterTbl.bBitsPerColor,	db	
+;	AT SuppParameterTbl.bCharWidth,		db	
+;	AT SuppParameterTbl.bCharHeight,	db	
+;	AT SuppParameterTbl.bVESAMemoryModel,	db	
+;	AT SuppParameterTbl.bVESAModeAttrs,	db	
+;	AT SuppParameterTbl.bReserved1,		db	0
+;	AT SuppParameterTbl.bReserved2,		db	0
+;	AT SuppParameterTbl.bModelsAllowedIn,	db	
+;	AT SuppParameterTbl.bMemoryRequired,	db	
+;	AT SuppParameterTbl.bMonitorType,	db	
+;	AT SuppParameterTbl.bSR07,		db	
+;	AT SuppParameterTbl.bSR0F,		db	
+;	AT SuppParameterTbl.bSR0E,		db	
+;	AT SuppParameterTbl.bSR1E,		db	
+;	AT SuppParameterTbl.bGR0B,		db	
+;	AT SuppParameterTbl.bCR19,		db	
+;	AT SuppParameterTbl.bCR1A,		db	
+;	AT SuppParameterTbl.bCR1B,		db	
+;	AT SuppParameterTbl.bDACEXT,		db	
+;iend
+istruc SuppParameterTbl
+	AT SuppParameterTbl.bModeNumber,	db	14h
+	AT SuppParameterTbl.wVESAModeNumber,	dw	0
+	AT SuppParameterTbl.wHorzRes,		dw	1056
+	AT SuppParameterTbl.wVertRes,		dw	400
+	AT SuppParameterTbl.bBitsPerColor,	db	4
+	AT SuppParameterTbl.bCharWidth,		db	8
+	AT SuppParameterTbl.bCharHeight,	db	16
+	AT SuppParameterTbl.bVESAMemoryModel,	db	0	; Text
+	AT SuppParameterTbl.bVESAModeAttrs,	db	0Eh	; Color, BIOS-supported, optional info
+	AT SuppParameterTbl.bReserved1,		db	0F2h
+	AT SuppParameterTbl.bReserved2,		db	6Fh
+	AT SuppParameterTbl.bModelsAllowedIn,	db	0FFh
+	AT SuppParameterTbl.bMemoryRequired,	db	01h
+	AT SuppParameterTbl.bMonitorType,	db	04h
+	AT SuppParameterTbl.bSR07,		db	0
+	AT SuppParameterTbl.bSR0F,		db	0
+	AT SuppParameterTbl.bSR0E,		db	0
+	AT SuppParameterTbl.bSR1E,		db	0
+	AT SuppParameterTbl.bGR0B,		db	46h
+	AT SuppParameterTbl.bCR19,		db	0
+	AT SuppParameterTbl.bCR1A,		db	0
+	AT SuppParameterTbl.bCR1B,		db	5Ah
+	AT SuppParameterTbl.bDACEXT,		db	3Eh
+iend
+
+	db	00h, 00h, 00h, 00h, 00h, 08h, 08h
+
+istruc SuppParameterTbl
+	AT SuppParameterTbl.bModeNumber,	db	54h
+	AT SuppParameterTbl.wVESAModeNumber,	dw	10Ah
+	AT SuppParameterTbl.wHorzRes,		dw	1056
+	AT SuppParameterTbl.wVertRes,		dw	350
+	AT SuppParameterTbl.bBitsPerColor,	db	4
+	AT SuppParameterTbl.bCharWidth,		db	8
+	AT SuppParameterTbl.bCharHeight,	db	8
+	AT SuppParameterTbl.bVESAMemoryModel,	db	0	; Text
+	AT SuppParameterTbl.bVESAModeAttrs,	db	0Eh	; Color, BIOS-supported, optional info
+	AT SuppParameterTbl.bReserved1,		db	0F3h
+	AT SuppParameterTbl.bReserved2,		db	0AFh
+	AT SuppParameterTbl.bModelsAllowedIn,	db	0FFh
+	AT SuppParameterTbl.bMemoryRequired,	db	01h
+	AT SuppParameterTbl.bMonitorType,	db	04h
+	AT SuppParameterTbl.bSR07,		db	0
+	AT SuppParameterTbl.bSR0F,		db	0
+	AT SuppParameterTbl.bSR0E,		db	0
+	AT SuppParameterTbl.bSR1E,		db	0
+	AT SuppParameterTbl.bGR0B,		db	46h
+	AT SuppParameterTbl.bCR19,		db	0
+	AT SuppParameterTbl.bCR1A,		db	0
+	AT SuppParameterTbl.bCR1B,		db	5Ah
+	AT SuppParameterTbl.bDACEXT,		db	3Eh
+iend
+
+	db	00h, 00h, 00h, 00h, 00h, 08h, 08h
+
+istruc SuppParameterTbl
+	AT SuppParameterTbl.bModeNumber,	db	55h
+	AT SuppParameterTbl.wVESAModeNumber,	dw	109h
+	AT SuppParameterTbl.wHorzRes,		dw	1056
+	AT SuppParameterTbl.wVertRes,		dw	350
+	AT SuppParameterTbl.bBitsPerColor,	db	4
+	AT SuppParameterTbl.bCharWidth,		db	8
+	AT SuppParameterTbl.bCharHeight,	db	14
+	AT SuppParameterTbl.bVESAMemoryModel,	db	0
+	AT SuppParameterTbl.bVESAModeAttrs,	db	0Eh
+	AT SuppParameterTbl.bReserved1,		db	0F4h
+	AT SuppParameterTbl.bReserved2,		db	0AFh
+	AT SuppParameterTbl.bModelsAllowedIn,	db	0FFh
+	AT SuppParameterTbl.bMemoryRequired,	db	01h
+	AT SuppParameterTbl.bMonitorType,	db	04h
+	AT SuppParameterTbl.bSR07,		db	0
+	AT SuppParameterTbl.bSR0F,		db	0
+	AT SuppParameterTbl.bSR0E,		db	0
+	AT SuppParameterTbl.bSR1E,		db	0
+	AT SuppParameterTbl.bGR0B,		db	46h
+	AT SuppParameterTbl.bCR19,		db	0
+	AT SuppParameterTbl.bCR1A,		db	0
+	AT SuppParameterTbl.bCR1B,		db	5Ah
+	AT SuppParameterTbl.bDACEXT,		db	3Eh
+iend
+
+	db	00h, 00h, 00h, 00h, 00h, 08h, 08h
+	db	5Ch, 03h, 01h, 20h, 03h, 58h, 02h, 08h, 08h, 10h, 04h, 1Eh, 0E5h
 	db	2Fh, 00h, 01h, 04h, 22h, 1Ch, 1Ch, 1Ah, 4Bh, 01h, 20h, 53h, 30h, 00h, 00h, 00h
 	db	22h, 00h, 01h, 01h, 5Ch, 03h, 01h, 20h, 03h, 58h, 02h, 08h, 08h, 10h, 04h, 1Eh
 	db	85h, 2Fh, 0FFh, 01h, 04h, 22h, 1Ch, 1Ch, 12h, 48h, 01h, 20h, 64h, 3Ah, 00h, 00h
@@ -4009,7 +3988,7 @@ entry:
 	call	LAB_270d
 .7:
 	call	LAB_1426
-	call	LAB_0184
+	call	ReadConfigFromEEPROM
 	mov	dx,INDEX_REG
 	mov	ax,318h
 	out	dx,ax
@@ -9571,11 +9550,17 @@ LAB_4f57:
 	ret						; Return to caller
 
 LAB_4f5b:
-	db	00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h, 21h, 00h, 42h, 14h
+	db	00h, 00h, 00h, 00h
+	dw	0					; Pointer to next negative offset table in linked list
+	dw	0
+	dw	0					; Last link flag
+	dw	21h					; Size of supplemental table
+	dw	LAB_1442				; Pointer to supplemental mode parameters
 	dw	0C00h
-	db	07h, 19h
+	dw	LAB_1907				; Pointer to standard mode parameters
 	dw	0C00h
-	db	25h, 00h, 56h, 52h
+	dw	25h					; Number of extended video modes
+	db	'VR'
 
 	; Video Save Pointer Table
 LAB_4f73:
@@ -9595,8 +9580,16 @@ istruc VideoSavePointerTbl
 iend
 
 	db	00h, 00h, 00h, 00h
-	db	00h, 00h, 00h, 00h, 00h, 00h, 21h, 00h, 42h, 14h, 00h, 0E0h, 07h, 19h, 00h, 0E0h
-	db	25h, 00h, 56h, 52h
+	dw	0					; Pointer to next negative offset table in linked list
+	dw	0
+	dw	0					; Last link flag
+	dw	21h					; Size supplemental table
+	dw	LAB_1442				; Pointer to supplemental mode parameters
+	dw	0E000h
+	dw	LAB_1907				; Pointer to standard mode parameters
+	dw	0E000h
+	dw	25h					; Number of extended video modes
+	db	'VR'
 
 	; Video Save Pointer Table
 LAB_4fa7:

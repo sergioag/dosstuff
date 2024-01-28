@@ -111,6 +111,31 @@ struc VideoParameterTbl
 	.baGraphContRegs		resb	9	; Values for Graphics Controller Registers 00h-08h
 endstruc
 
-
+struc SuppParameterTbl
+	.bModeNumber			resb	1	; Video mode number
+	.wVESAModeNumber		resb	2	; VESA Video mode number
+	.wHorzRes			resb	2	; Horizontal resolution
+	.wVertRes			resb	2	; Vertical resolution
+	.bBitsPerColor			resb	1	; Bits per color
+	.bCharWidth			resb	1	; Character width
+	.bCharHeight			resb	1	; Character height
+	.bVESAMemoryModel		resb	1	; VESA memory model (as in Function 1)
+	.bVESAModeAttrs			resb	1	; VESA Mode Attributes (as in Function 1)
+	.bReserved1			resb	1	; Reserved
+	.bReserved2			resb	1	; Reserved
+	.bModelsAllowedIn		resb	1	; What chipset mode is this mode allowed (as in
+							; AL of alternate function 80h)
+	.bMemoryRequired		resb	1	; Memory required, in 64k blocks
+	.bMonitorType			resb	1	; Bitmask of supported monitors
+	.bSR07				resb	1	; SR07, Extended Sequencer Control
+	.bSR0F				resb	1	; SR0F, DRAM control
+	.bSR0E				resb	1	; SR0E, VCLK3 numerator
+	.bSR1E				resb	1	; SR1E, VCLK3 denominator
+	.bGR0B				resb	1	; GR0B, Graphics extensions
+	.bCR19				resb	1	; CR19, Interlace end
+	.bCR1A				resb	1	; CR1A, Miscellaneous Control
+	.bCR1B				resb	1	; CR1B, Display Control
+	.bDACEXT			resb	1	; DACEXT, Hidden DAC register
+endstruc
 
 %endif ; !__ROMVARS_INC__
