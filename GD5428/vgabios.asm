@@ -1495,19 +1495,25 @@ LAB_0b61:
 	db	03h,22h,03h,32h
 
 LAB_0b71:
-	mov	si,LAB_0b61
-	SHL	al,1
-	xor	ah,ah
-	add	si,ax
-	cs lodsb
-	push	ax
-	mov	al,0Ah
-	call	ReadSequencerRegister
-	SHR	ah,2
-	mov	cl,ah
-	and	cl,10h
-	pop	ax
-	or	al,cl
+	mov	si,LAB_0b61				; Base array
+
+	shl	al,1					; Multiply by 2
+	xor	ah,ah					; Ensure zero high byte
+
+	add	si,ax					; Add to base
+	cs lodsb					; Load into AH
+
+	push	ax					; Save it
+
+	mov	al,0Ah					; SRA: Scratchpad 1
+	call	ReadSequencerRegister			; Read it
+
+	SHR	ah,2					; Divide by 4 (6 bits left in AH)
+	mov	cl,ah					; SRA value (6 high bits) in CL
+	and	cl,10h					; Isolate SRA bit 6 (High Refresh), now in bit 4
+
+	pop	ax					; Restore value from table
+	or	al,cl					
 	cs mov	bh,[si]
 LAB_0b90:
 	mov	ch,bh
@@ -1750,7 +1756,7 @@ ReadSequencerRegister:
 	mov	dx,SEQ_INDEX			; Sequencer index reg (3C4)
 	call	LAB_0f91			; Always sets ZF
 	jnz	.1				; Never branches
-	call	ReadIndirectRegister			; Read register
+	call	ReadIndirectRegister		; Read register
 .1:
 	ret
 
@@ -2576,20 +2582,23 @@ LAB_1337:
 	push	ax
 	push	cx
 	push	dx
-	mov	dx,SEQ_INDEX
-	mov	ax,10h
-	mov	cx,4
-LAB_1343:
-	out	dx,ax
-	inc	ax
-	loop	LAB_1343
-	mov	cl,2
-	mov	dl,0CEh
-	mov	al,9
-LAB_134d:
-	out	dx,ax
-	inc	ax
-	loop	LAB_134d
+
+	mov	dx,SEQ_INDEX			; Address sequence register index
+	mov	ax,10h				; Address: SR10, Value: 00
+	mov	cx,4				; Will set 4 registers
+.1:
+	out	dx,ax				; Write sequence register
+	inc	ax				; Point to next sequencer register
+	loop	.1				; Continue until done
+
+	mov	cl,2				; Will set 2 register
+	mov	dl,0CEh				; Point to Graphics Controller index
+	mov	al,9				; Point to GR9, value still 0
+.2:
+	out	dx,ax				; Write graphics controller data
+	inc	ax				; Point to next graphics controller register
+	loop	.2				; Continue until done
+
 	pop	dx
 	pop	cx
 	pop	ax
