@@ -10,7 +10,7 @@ $Nolist
 
                 %*Define (Bus(Value))
                 ( Mov   Al,%Value
-                  Out   0C0H,A1 )
+                  Out   0C0H,Al )
 
 
 $Eject
