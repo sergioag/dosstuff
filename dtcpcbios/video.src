@@ -251,9 +251,9 @@ ParamOffStruc   Ends
 
                 Org     0F0A4H                  ;Align with PC and Xt
 $NoList
-MISSING LINE
-MISSING LINE
-MISSING LINE
+VidParamsPointer        ParameterStruc          ;MISSING LINE
+OffsetTable             ParamOffStruc           ;MISSING LINE
+;MISSING LINE
 $List
 
 $Eject

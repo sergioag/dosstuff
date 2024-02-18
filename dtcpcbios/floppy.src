@@ -373,7 +373,7 @@ OutError        Db      SectNotFndStat          ;Sector not found
 
 TableStruc      Ends
 $Nolist
-MISSING LINE
+Table           TableStruc                      ;MISSING LINE
 $List
 
 DiskIO          Proc    Near

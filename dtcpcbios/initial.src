@@ -559,7 +559,7 @@ PrintBaseLoop:
                 Mov     Al,0AAH                 ;Try to write bit pattern
                 Out     Dx,Al                   ;...to printer port
                 %Bus    (0FFH)                  ;Force floating bus hi
-MISSING LINE 1087
+                                                ;MISSING LINE (Seems part of macro expansion above)
                 In      Al,Dx                   ;...then read data back
                 Cmp     Al,0AAH                 ;...and see if it took
                 Jne     PrinterNotThere         ;...jump if not

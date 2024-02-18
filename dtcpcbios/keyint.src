@@ -372,9 +372,9 @@ PadStruc        Ends
 Org     0E987H - (Size(LevelOneStruc) + Size(LevelTwoStruc) + Size(PadStruc))
 
 $NoList
-MISSING LINE
-MISSING LINE
-MISSING LINE
+LevelOneTable   LevelOneStruc           ;MISSING LINE
+LevelTwoTable   LevelTwoStruc           ;MISSING LINE
+PadTable        PadStruc                ;MISSING LINE
 $List
 
 LastTableByte   Equ     $-1             ;This byte should be 0E986H
