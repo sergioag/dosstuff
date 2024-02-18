@@ -48,7 +48,7 @@ $Eject
                 Public DisketteStat, FDCStatus, CrtMode, CrtColumns
                 Public Crtlength, CrtStart, CursorPosn, CursorMode
                 Public ActivePage, ActiveCard, CrtModeSet, CrtPalette
-                Public IOROMlnit, IOROMSegtnent, IntrFlag, TimerLow
+                Public IOROMInit, IOROMSegment, IntrFlag, TimerLow
                 Public TimerHigh, TimerOverflow, BiosBreak, ResetFlag
                 Public FixedDisk1, FixedDisk2, PrintTimeOut, RS232TimeOut
                 Public BufferStart, BufferEnd, PrintScnStatus
@@ -77,7 +77,7 @@ MfgErrFlag      Db      1 Dup(?)                ;Not used
                 Db      1 Dup(?)                ;Not used
 KeyboardFlag1   Db      1 Dup(?)                ;Keyboard
 KeyboardFlag2   Db      1 Dup(?)                ;...status
-Altlnput        Db      1 Dup(?)                ;Keypad data
+AltInput        Db      1 Dup(?)                ;Keypad data
 KeyBufHead      Dw      1 Dup(?)                ;Pointer to head of keyboard buffer
 KeyBufTail      Dw      1 Dup(?)                ;Pointer to tail of keyboard buffer
 KeyBuffer       Db      31 Dup(?)       ;Keyboard buffer area
@@ -102,7 +102,7 @@ IOROMSegment    Dw      1 Dup(?)                ;Not used
 IntrFlag        Db      1 Dup(?)                ;Not used
 TimerLow        Dw      1 Dup(?)                ;Timer
 TimerHigh       Dw      1 Dup(?)                ;...storage
-TimerDverflow   Db      1 Dup(?)                ;Timer overflow flag
+TimerOverflow   Db      1 Dup(?)                ;Timer overflow flag
 BiosBreak       Db      1 Dup(?)                ;If D7=1, break key hit
 ResetFlag       Dw      1 Dup(?)                ;Set to 1234 after initialization
 FixedDisk1      Dw      1 Dup(?)                ;Used by hard disk

@@ -100,7 +100,7 @@ BadCmdStat      Equ     00000001B               ;Unrecognizable command
 
 DMAVerifyMode   Equ     01000010B               ;Channel 2 verify normal
 DMAReadMode     Equ     01000110B               ;Channel 2 read normal
-DMAWriteMode    Equ     81001010B               ;Channel 2 write normal
+DMAWriteMode    Equ     01001010B               ;Channel 2 write normal
 
 ;               **************
 ;               *  Commands  *
@@ -112,7 +112,7 @@ FDCFormatCMD    Equ     01001101B               ;Format command
 FDCRecalCMD     Equ     00000111B               ;Recalibrate command
 FDCSpecifyCMD   Equ     00000011B               ;Specify command (timers)
 FDCSenseIntCMD  Equ     00001000B               ;Sense interrupt command
-FDCSeekCMD      Equ     80001111B               ;Seek command
+FDCSeekCMD      Equ     00001111B               ;Seek command
 
 $Include (IbmInc)
 $Eject
@@ -129,7 +129,7 @@ BiosStack       Segment Public
 BiosStack       Ends
 
 BiosDataArea    Segment Public
-                Extrn FDCStatus:Bytey, DisketteStat:Byte, SeekStatus:Byte
+                Extrn FDCStatus:Byte, DisketteStat:Byte, SeekStatus:Byte
                 Extrn MotorStatus:Byte, MotorCount:Byte
 BiosDataArea    Ends
 $Eject
@@ -216,7 +216,7 @@ FloppyDriver    Proc    Far
                 ;       Set the motor timer and affect carry with status
 
                 Mov     Ah,MotorWait            ;Plug timer to keep
-                Mov     MotorAcount,Ah          ;...drives running
+                Mov     MotorCount,Ah           ;...drives running
                 Mov     Ah,DisketteStat         ;Affect carry flag
                 Cmp     Ah,1                    ;If >1, carry will be clear
                 Cmc                             ;...not, if >1, carry set
@@ -363,17 +363,17 @@ TheirError      Db      10000000B               ;End of track
                 Db      00000100B               ;Sector not found
                 Db      00000010B               ;Write protect error
                 Db      00000001B               ;Missing address mark
-OutError        Db      SectNotFndStat          ;Sector not found
+OurError        Db      SectNotFndStat          ;Sector not found
                 Db      BadCrcStat              ;Crc error
                 Db      BadDmaStat              ;Dma error
                 Db      SectNotFndStat          ;Sector not found
                 Db      WriteProtStat           ;Write protect
-                Db      BadAddrMarkStat         ;Address mark not found
+                Db      BadAddMarkStat          ;Address mark not found
                 Db      BadFDCStat              ;None of the above (??)
 
 TableStruc      Ends
 $Nolist
-Table           TableStruc                      ;MISSING LINE
+Table           TableStruc<>                    ;MISSING LINE
 $List
 
 DiskIO          Proc    Near

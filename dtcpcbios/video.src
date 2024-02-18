@@ -66,7 +66,7 @@ IntSegment      Segment Public
 IntSegment      Ends
 
 BiosDataArea    Segment Public
-                Extrn CrtMode:Byte, CrtColumns:Word, CrtLenath:Word
+                Extrn CrtMode:Byte, CrtColumns:Word, CrtLength:Word
                 Extrn CrtStart:Word, CursorPosn:Word, CursorMode:Word
                 Extrn ActivePage:Byte, ActiveCard:Word, CrtModeSet:Byte
                 Extrn CrtPalette:Byte, EquipFlag:Word
@@ -139,7 +139,7 @@ Char            Equ     Byte Ptr [Bp+2]         ;Char handling - char in/out
 AttribOut       Equ     Byte Ptr [Bp+3]         ;Char handling - attrib out
 CharCount       Equ     Word Ptr [Bp+6]         ;Char handling - repeat count
 AttribIn        Equ     Byte Ptr [Bp+4]         ;Char handling - attrib in
-Colorld         Equ     Byte Ptr [Bp+5]         ;Set Pallette - Color Id 
+ColorId         Equ     Byte Ptr [Bp+5]         ;Set Pallette - Color Id
 ColorValue      Equ     Byte Ptr [Bp+4]         ;Set Pallette - Color value
 DotRow          Equ     Word Ptr [Bp+8]         ;Read/write dot - row number
 DotCol          Equ     Word Ptr [Bp+6]         ;Read/write dot - col number
@@ -251,8 +251,8 @@ ParamOffStruc   Ends
 
                 Org     0F0A4H                  ;Align with PC and Xt
 $NoList
-VidParamsPointer        ParameterStruc          ;MISSING LINE
-OffsetTable             ParamOffStruc           ;MISSING LINE
+VidParamsPointer        ParameterStruc<>        ;MISSING LINE
+OffsetTable             ParamOffStruc<>         ;MISSING LINE
 ;MISSING LINE
 $List
 
@@ -787,7 +787,7 @@ ClearGraphLoop:
                 Pop     Di                      ;Restore pointer
                 Sub     Di,Bx                   ;Point at next row to clear
                 Dec     Dh                      ;Decrement count of scans to do
-                Jnz     ClearGraphLoop:         ;...and loop till clear
+                Jnz     ClearGraphLoop          ;...and loop till clear
                 Ret                             ;...then return
 ScrollGraph     Endp
 $Eject
@@ -1070,7 +1070,7 @@ OddFieldWr:
                 Pop     Si                      ;Restore pointers
                 Pop     Di                      ;...for next write
                 Inc     Di                      ;Bump to next video position
-                Loop    RepeatWrtLoop           ;Loop till Cx written
+                Loop    RepeatWrLoop            ;Loop till Cx written
                 Pop     Ds                      ;Restore data segment
                 Assume  Ds:BiosDataArea         ;Tell ASM86 data segment
                 Ret                             ;...then return
@@ -1148,7 +1148,7 @@ OddFieldRd:
 HiResRead:
 
                 Mov     Dh,4                    ;4 lines of dots
-HiResLoop:
+HiReadLoop:
                 Mov     Ah,[Si]                 ;Get odd row of dots from video
 
                 ;       Store character under stack frame
@@ -1368,7 +1368,7 @@ WriteTTY        Proc    Near                    ;Write glass tty
 
                 ;       Bump Cursor in Dh Dl
 
-                In      Dl                      ;Column + 1
+                Inc     Dl                      ;Column + 1
                 Cmp     Dl,Byte Ptr CrtColumns  ;...overflow
                 Jnz     SetCursAndReturn        ;...jump if not
                 Xor     Dl,Dl                   ;Clear row count

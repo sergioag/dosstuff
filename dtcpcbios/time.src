@@ -116,7 +116,7 @@ $Eject
 
                 Org     0FEA5H                  ;Align with PC and Xt
 
-TimeHdwrInt     Proc    Far
+TimerHdwrInt    Proc    Far
                 Sti                             ;Restore interrupts
                 Push    Ds                      ;Save minimum registers
                 Push    Dx                      ;...so this runs
@@ -142,7 +142,7 @@ MotorsStillRun:
 NoCarryToHi:
                 Cmp     TimerHigh,18H           ;Does the timer = 24 hrs
                 Jne     NoCarryToOflo           ;...jump if not
-                Camp    TimerLow,0B0H           ;Does the timer = 24 hrs
+                Cmp     TimerLow,0B0H           ;Does the timer = 24 hrs
                 Jne     NoCarryToOflo           ;...jump if not
 
                 ;       Set overflow

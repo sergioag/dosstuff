@@ -41,7 +41,7 @@ $Eject
 ;               *  Public Symbols  *
 ;               ********************
 
-                Public  KeyboardHdwrlnt
+                Public  KeyboardHdwrInt
 
 
 ;               *************
@@ -255,7 +255,7 @@ $Eject
 
 BiosDataArea    Segment Public
                 Extrn KeyboardFlag1:Byte, KeyboardFlag2:Byte
-                Extrn Altlnput:Byte, KeyBufHead:Word, KevBufTail:Word
+                Extrn AltInput:Byte, KeyBufHead:Word, KeyBufTail:Word
                 Extrn KeyBuffer:Byte, ResetFlag:Word, BufferStart:Word
                 Extrn BufferEnd:Word, BiosBreak:Byte
                 Extrn CrtMode:Byte, CrtModeSet:Byte
@@ -372,9 +372,9 @@ PadStruc        Ends
 Org     0E987H - (Size(LevelOneStruc) + Size(LevelTwoStruc) + Size(PadStruc))
 
 $NoList
-LevelOneTable   LevelOneStruc           ;MISSING LINE
-LevelTwoTable   LevelTwoStruc           ;MISSING LINE
-PadTable        PadStruc                ;MISSING LINE
+LevelOneTable   LevelOneStruc<>         ;MISSING LINE
+LevelTwoTable   LevelTwoStruc<>         ;MISSING LINE
+PadTable        PadStruc<>              ;MISSING LINE
 $List
 
 LastTableByte   Equ     $-1             ;This byte should be 0E986H
@@ -551,7 +551,7 @@ ShiftStateShort:
 ;               *************************
 
 AltState:
-                Cmp     Alt,ControlZ            ;Is Level 1 <= Control Z?
+                Cmp     Al,ControlZ             ;Is Level 1 <= Control Z?
                 Ja      AltNotAZ                ;...jump if not and continue
                 Mov     Al,0                    ;...else return extended
                 Jmp     KeyBufLoad2             ;...Al = 0, Ah = Scan
@@ -628,7 +628,7 @@ ShiftState:
                 Int     TrapPrintScreen         ;Perform print screen
                 Jmp     KeyReturnNoEoi          ;...and return
 
-KeyReturn6:
+KeyContinue6:
                 Cmp     Al,ControlZ             ;is Level 1 <= Control Z?
                 Ja      ShiftNotAZ              ;...jump if not and continue
                 Add     Al,40H                  ;...else return extended
@@ -686,7 +686,7 @@ PadALTState:
                 Jz      KeyPadCont2             ;...........jump if not
                 Cmp     Ah,DelKey               ;Are we processing DEL?
                 Jne     KeyPadCont2             ;...jump if not
-                Mov     ResetFlag               ;...else, set reset flag
+                Mov     ResetFlag,1234H         ;...else, set reset flag
                 Jmp     ResetEntry              ;...and reset the system
 KeyPadCont2:
                 Mov     Bx,Offset PadTable.Shift  ;Point at numeric translation

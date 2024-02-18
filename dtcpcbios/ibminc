@@ -494,7 +494,7 @@ $Eject
 ;               *  Video Driver Command Equates  *
 ;               **********************************
 
-VidCmdlnit      Equ     0
+VidCmdInit      Equ     0
 VidCmdCurType   Equ     1
 VidCmdCurPos    Equ     2
 VidCmdRdCurPos  Equ     3

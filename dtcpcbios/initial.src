@@ -65,14 +65,14 @@ $Eject
 
 
 BiosDataArea    Segment Public
-                Extrn MemorvSize:Word, ResetFlag:Word, EquipFlag:Word
+                Extrn MemorySize:Word, ResetFlag:Word, EquipFlag:Word
                 Extrn KeyBuffer:Byte, KeyBufHead:Word, KeyBufTail:Word
                 Extrn BufferStart:Word, BufferEnd:Word
                 Extrn PrintTimeOut:Word, RS232TimeOut:Word
                 Extrn PrinterBase:Word, RS232Base:Word
                 Extrn IOROMInit:Word, IOROMSegment:Word
                 Extrn MfgErrFlag:Byte, PositionCursor:Near, ClearScreen:Near
-                EKtrn CrtMode:Byte1 CrtColumns:Word
+                Extrn CrtMode:Byte, CrtColumns:Word
                 Extrn CrtModeSet:Byte, ActiveCard:Word
 
 
@@ -135,7 +135,7 @@ $Eject
 
 Bios            Segment Common
 
-                Extrn PrintScreenInt:Near, NMInt:Near, IllegalInt:Near
+                Extrn PrintScreenInt:Near, NMIInt:Near, IllegalInt:Near
                 Extrn WordOut:Near, ByteOut:Near, KeyIn:Near
                 Extrn PrintMessage:Near, Beep:Near, CharOut:Near
                 Extrn MemoryTest:Near, RomCheckCx:Near
@@ -267,8 +267,8 @@ Ok8088:
 
                 Mov     Al,01010100B            ;Setup timer 1
                 Out     PortCTCMode,Al          ;...for LSB only, Mode 2, Bin
-                Mov     Al,CRCRefreshDiv        ;Load timer 1
-                Out     PortCTCLoadHi1,Al       ;...with refresh divisor
+                Mov     Al,CTCRefreshDiv        ;Load timer 1
+                Out     PortCTCLoadCh1,Al       ;...with refresh divisor
                 Mov     Al,0                    ;Set DMA channel registers
                 Out     PortPageChan1,Al        ;...to base page
                 Out     PortPageChan2,Al        ;...do all three
@@ -462,7 +462,7 @@ NoBasic:
 
                 ;       Plug Print Screen Vector
 
-                Mov     Es:Word Ptr PrintScreeenTrapAddr,Offset PrintScreenInt
+                Mov     Es:Word Ptr PrintScreenTrapAddr,Offset PrintScreenInt
 
                 ;       Plug User Graphics Pointer with 0000
 
@@ -510,7 +510,7 @@ NoBasic:
                 Mov     Ax,Offset NullReturn    ;Get offset of null int return
                 Mov     Es:Word ptr VideoTrapAddr,Ax    ;...and force into video vector
                 Jmp     Short DontInitVideos    ;Don't init the videos
-DisplayExistsJump:
+DisplayExistsJmp:
 
                 ;       Set Video Card Per Switches
 

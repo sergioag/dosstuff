@@ -126,7 +126,7 @@ Bios            Segment Common
                 Extrn MemorySizeDriver:Far,FloppyDriver:Far,CommsDriver:Far
                 Extrn CassetteDriver:Far,KeyboardDriver:Far,PrinterDriver:Far
                 Extrn BootDriver:Far,TODDriver:Far,VidParamsPointer:Byte
-                Extrn FloppyParamsPointer:Byte, ResetEntry:Far, PorEntry.Far
+                Extrn FloppyParamsPointer:Byte, ResetEntry:Far, PorEntry:Far
                 Extrn VideoInit:Near, ClearScreen:Near, PositionCursor:Near
 
 ;               **************************
@@ -319,7 +319,7 @@ IllegalInt      Proc    Near
 NonZeroLevel:
                 In      Al,PortPICOCW1          ;Get Mask Register
                 Or      Al,Ah                   ;...mask off service level
-                Out     PortPICOCW1             ;...in progress
+                Out     PortPICOCW1,Al          ;...in progress
                 Mov     Al,PICEOI               ;Interrupt ack
                 Out     PortPICOCW2,Al          ;...to 8259A
 IllegalReturn:
