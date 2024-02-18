@@ -84,7 +84,7 @@ SoftParams      Equ     Es:Byte Ptr [Si]
 
 OkStat          Equ     000000000B              ;Ok status
 TimeOutStat     Equ     10000000B               ;Timeout
-BadSeekStat     Equ     01000080B               ;Seek error
+BadSeekStat     Equ     01000000B               ;Seek error
 BadFDCStat      Equ     00100000B               ;Floppy controller bad
 BadCrcStat      Equ     00010000B               ;CRC error
 DMAPageStat     Equ     00001001B               ;Dma requested to cross 64k
