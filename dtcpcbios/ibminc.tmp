@@ -118,7 +118,7 @@ PortConfigSw    Equ     62H             ;Port C (lower) are config. switches
 ;               ************************************
 ;               *  Control and Flag Bits (C Port)  *
 ;               ************************************
-PPICLoopPort    Equ     00000001B       ;Loop on post bit
+PPICLoopPost    Equ     00000001B       ;Loop on post bit
 PPICNPInstalled Equ     00000010B       ;Numeric processor installed
 PPICRAM         Equ     00001100B       ;Ram size bits
 PPICDisplay     Equ     00000011B       ;Display type bits
