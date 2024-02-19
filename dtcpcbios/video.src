@@ -313,7 +313,7 @@ SetModeJump1:
 
                 Xor     Bh,Bh                   ;Form index into table (Bl=mode)
                 Push    Bx                      ;Save Bx=crt mode
-                Mov     Bl,byte ptr Cs:OffsetTable[Bx]      ;Load the offset
+                Mov     Bl,OffsetTable[Bx]      ;Load the offset
                 Add     Si,Bx                   ;...and point at right list
                 Mov     Cx,16                   ;Do 16 bytes
 
@@ -658,7 +658,7 @@ BlankBotLoop:
                 Call    WhichMode               ;Mono card?
                 Jz      ScrollReturn            ;...return if so
                 Mov     Al,CrtModeSet           ;Get current mode
-                Mov     Dx,PortColorMode        ;...and restore it
+                Mov     Dx,PorColorMode         ;...and restore it
                 Out     Dx,Al                   ;...to re-enable video
 ScrollReturn:
                 Ret                             ;and return
