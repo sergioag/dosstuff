@@ -1,6 +1,6 @@
-$Title ('DTC/PC BIOS Initialization Module  V1.0')
+$Title ('DTC/PC BIOS Initialization Module V1.0')
 $Pagelength (80) Pagewidth (132) Debug Nogen
-Name Video
+Name Initial
 
 
 ;    Author:		Don K. Harrison
@@ -36,7 +36,6 @@ $Eject
 
 
 $Eject
-
 ;		********************
 ;		*  Public Symbols  *
 ;		********************
@@ -58,17 +57,13 @@ AsciiCarriage	Equ	0DH			;Carriage return
 AsciiLineFeed	Equ	0AH			;Line feed
 
 
-;$Include (IbmInc.Asm)
 $Include (IbmInc)
-;		*************************
-;		*  Global Include File  *
-;		*************************
-;$Nolist
 $Eject
 
 ;		*******************
 ;		*  Data Segments  *
 ;		*******************
+
 
 BiosDataArea	Segment Public
 		Extrn MemorySize:Word, ResetFlag:Word, EquipFlag:Word
@@ -81,6 +76,7 @@ BiosDataArea	Segment Public
 		Extrn CrtMode:Byte, CrtColumns:Word
 		Extrn CrtModeSet:Byte, ActiveCard:Word
 
+
 BiosDataArea	Ends
 
 BiosStack	Segment Public
@@ -88,7 +84,7 @@ BiosStack	Segment Public
 BiosStack	Ends
 
 HiStack	Segment
-HiStack 	Ends
+HiStack	Ends
 
 IntSegment	Segment Public
 		Extrn RAMVectors:DWord, ROMVectors:DWord, VideoTrapAddr: DWord
@@ -117,7 +113,6 @@ ColorSeg	Ends
 
 
 $Eject
-
 ;		******************************
 ;		*  Segment at End of Memory  *
 ;		******************************
@@ -127,6 +122,7 @@ ReleaseDate	Segment byte
 ;		***********************
 ;		*  Release Date Code  *
 ;		***********************
+
 
 		Db	'12/23/83DKH'
 
@@ -295,10 +291,11 @@ Ok8088:
 		Out	PortDMAMaskSngl,Al	;...turning on refresh
 
 		;	Test if refresh working
+
 		;	NOTE: this test was removed in cloned copies
 		;	as it is likely to fail on anything other 
 		;	than a 4.77 MHz 8088
-%If (%BugFix Eq 0) Then (
+%If (1) Then (
 		Mov	Cx,0A00H		;Un-noticable wait time
 RefTstLoop:
 		Loop	RefTstLoop		;Loop for a short while
@@ -315,6 +312,7 @@ RefTstLoop:
 DmaErr:
 		Mov	Bp,RefreshErr		;Error = Refresh Error
 ) Else (
+		;	Bypass DMA refresh test
 		Mov	Bp,0			;Clear error flag
 %Repeat	(01CH) (Nop				;fill to maintain ORGs
 )

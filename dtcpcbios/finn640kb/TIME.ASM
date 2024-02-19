@@ -1,6 +1,6 @@
-$Title ('DTC/PC BIOS Time of Day and Real Ti11e Clock V1.0')
+$Title ('DTC/PC BIOS Time of Day and Real Time Clock  V1.0')
 $Pagelength (80) Pagewidth (132) Debug Nogen
-Name Equipmnt
+Name Time
 
 
 ;   Author:	Don K. Harrison
@@ -14,6 +14,7 @@ Name Equipmnt
 
 ;	This module contains the time of day driver routine (Int 26)
 ;   and the real time clock hard111are interrupt service routine !Int 8) 
+;
 
 
 
@@ -33,8 +34,8 @@ $Eject
 
 
 
-$Eject
 
+$Eject
 
 ;		********************
 ;		*  Public Symbols  *
@@ -49,12 +50,7 @@ $Eject
 
 		;	All Equates in include file: IbmInc
 
-;$Include (IbmInc.Asm)
 $Include (IbmInc)
-;		*************************
-;		*  Global Include File  *
-;		*************************
-;$NoList
 $Eject
 
 
@@ -151,7 +147,7 @@ MotorsStillRun:
 NoCarryToHi:
 		Cmp	TimerHigh,18H		;Does the timer = 24 hrs 
 		Jne	NoCarryToOflo		;...Jump if not 
-		Cmp	TimerLow,080H		;Does the timer = 24 hrs 
+		Cmp	TimerLow,0B0H		;Does the timer = 24 hrs
 		Jne	NoCarryToOflo		;...Jump if not 
 
 		;	Set overflow 
