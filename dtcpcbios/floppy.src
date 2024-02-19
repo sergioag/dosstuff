@@ -236,7 +236,7 @@ FloppyDriver    Proc    Far
                 Pop     Di                      ;Restore pointers Di
                 Pop     Si                      ;...Si
                 Pop     Bp                      ;...Bp
-                Ret                             ;Return without restoring flags
+                Ret     2                       ;Return without restoring flags
 FloppyDriver    Endp
 $Eject
 ;               ***********************************

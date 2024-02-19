@@ -1,9 +1,5 @@
 $Title ('DTC/PC BIOS Equipment Determination and Memory Size V1.0')
-$Pagelength (80)
-$Pagewidth (132)
-$Debug
-$Nogen
-;$Pagelength (80) Pagewidth (132) Debug Nogen
+$Pagelength (80) Pagewidth (132) Debug Nogen
 Name Equipmnt
 
 
@@ -56,7 +52,8 @@ $Eject
 
 		;	All Equates in include file: IbmInc
 
-$Include (IbmInc.Asm)
+;$Include (IbmInc.Asm)
+$Include (IbmInc)
 ;		*************************
 ;		*  Global Include File  *
 ;		*************************
@@ -68,7 +65,7 @@ $Eject
 ;		*  Data Segments  *
 ;		*******************
 
-BiosDataArea	Segment At 40H 
+BiosDataArea	Segment Public
 		Extrn MemorySize:Word, EquipFlag:Word
 BiosDataArea	Ends
 $Eject

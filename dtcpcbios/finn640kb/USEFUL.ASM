@@ -1,9 +1,5 @@
 $Title ('DTC/PC BIOS Useful Procedures V1.0')
-$Pagelength (80)
-$Pagewidth (132)
-$Debug
-$Nogen
-;$Pagelength (80) Pagewidth (132) Debug Nogen
+$Pagelength (80) Pagewidth (132) Debug Nogen
 Name Useful
 
 
@@ -66,7 +62,8 @@ $Eject
 AsciiCarriage	Equ	0DH			;Carriage return
 AsciiLineFeed	Equ	0AH			;Line feed
 
-$Include (IbmInc.Asm)
+;$Include (IbmInc.Asm)
+$Include (IbmInc)
 ;		*************************
 ;		*  Global Include File  *
 ;		*************************
@@ -78,8 +75,7 @@ $Eject
 ;		*******************
 
 
-;BiosDataArea	Segment Public
-BiosDataArea	Segment At 40H
+BiosDataArea	Segment Public
 		Extrn EquipFlag:Word
 BiosDataArea	Ends
 

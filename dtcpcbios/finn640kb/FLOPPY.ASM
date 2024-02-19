@@ -1,9 +1,5 @@
 $Title ('DTC/PC BIOS Floppy Disk Driver V1.0')
-$Pagelength (80)
-$Pagewidth (132)
-$Debug
-$Nogen
-;$Pagelength (80) Pagewidth (132) Debug Nogen
+$Pagelength (80) Pagewidth (132) Debug Nogen
 Name Floppy
 
 
@@ -116,7 +112,8 @@ FDCSpecifyCMD   Equ     00000011B             ;Specify command (timers)
 FDCSenseIntCMD  Equ     00001000B             ;Sense interrupt command
 FDCSeekCMD      Equ     00001111B             ;Seek command
 
-$Include (IbmInc.Asm)
+;$Include (IbmInc.Asm)
+$Include (IbmInc)
 ;               *************************
 ;               *  Global Include File  *
 ;               *************************
@@ -128,17 +125,14 @@ $Eject
 ;               *  Data Segments  *
 ;               *******************
 
-;IntSegment      Segment Public
-IntSegment      Segment At 0
+IntSegment      Segment Public
 		Extrn FloppyParamsTrapAddr:Dword
 IntSegment      Ends
 
-;BiosStack       Segment Public
-BiosStack       Segment At 30H
+BiosStack       Segment Public
 BiosStack       Ends
 
-;BiosDataArea    Segment Public
-BiosDataArea    Segment At 40H
+BiosDataArea    Segment Public
 		Extrn FDCStatus:Byte, DisketteStat:Byte, SeekStatus:Byte
 		Extrn MotorStatus:Byte, MotorCount:Byte
 BiosDataArea    Ends

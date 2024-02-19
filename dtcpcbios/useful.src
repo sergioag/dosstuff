@@ -220,7 +220,7 @@ VideoInit       Proc    Near
                 Cmp     Ah,30H                  ;Is monochrome selected?
                 Je      InitVidJmp              ;...jump if so
                 Mov     Al,1                    ;Mode = 40x25
-                Cmp     Al,10H                  ;Is color 40x25?
+                Cmp     Ah,10H                  ;Is color 40x25?
                 Je      InitVidJmp              ;...jump if so
                 Mov     Al,3                    ;Mode = 80x25
 

@@ -658,7 +658,7 @@ BlankBotLoop:
                 Call    WhichMode               ;Mono card?
                 Jz      ScrollReturn            ;...return if so
                 Mov     Al,CrtModeSet           ;Get current mode
-                Mov     Dx,PorColorMode         ;...and restore it
+                Mov     Dx,PortColorMode        ;...and restore it
                 Out     Dx,Al                   ;...to re-enable video
 ScrollReturn:
                 Ret                             ;and return
@@ -1188,7 +1188,12 @@ ImageTry2:
                 Mov     Dx,128                  ;There are 128 of them
 ImageLoop:
                 Push    Si                      ;Save pointers
-                Push    Di                      ;...
+                Push    Di                      ;...while comparing
+                Mov     Cx,8                    ;Compare 8 bytes
+        Repe    Cmpsb                           ;...for a match
+
+                Pop     Di                      ;Restore pointers
+                Pop     Si                      ;...
                 Jz      MatchFound              ;Jump if match found
                 Inc     Al                      ;Increment ASCII
                 Add     Di,8                    ;Try next image

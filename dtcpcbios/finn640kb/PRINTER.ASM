@@ -1,9 +1,5 @@
 $Title ('DTC/PC BIOS Parallel Printer Driver V1.0')
-$Pagelength (80)
-$Pagewidth (132)
-$Debug
-$Nogen
-;$Pagelength (80) Pagewidth (132) Debug Nogen
+$Pagelength (80) Pagewidth (132) Debug Nogen
 Name Printer
 
 
@@ -53,7 +49,8 @@ $Eject
 
 		;	All Equates in include file: IbmInc
 
-$Include (Ibminc.Asm)	
+;$Include (Ibminc.Asm)
+$Include (Ibminc)
 ;		*************************
 ;		*  Global Include File  *
 ;		*************************
@@ -64,8 +61,7 @@ $Eject
 ;		*  Data Segments  *
 ;		*******************
 
-;BiosDataArea	Segment Public
-BiosDataArea	Segment At 40H
+BiosDataArea	Segment Public
 		Extrn PrintTimeOut:Byte, PrinterBase:Word
 BiosDataArea	Ends
 $Eject

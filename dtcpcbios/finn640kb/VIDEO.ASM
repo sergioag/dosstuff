@@ -1,9 +1,5 @@
 $Title ('DTC/PC BIOS Video Driver V1.0')
-$Pagelength (80)
-$Pagewidth (132)
-$Debug
-$Nogen
-;$Pagelength (80) Pagewidth (132) Debug
+$Pagelength (80) Pagewidth (132) Debug Nogen
 Name Video
 
 
@@ -58,7 +54,7 @@ AsciiLineFeed	Equ	0AH			;...for
 AsciiCarriage	Equ	0DH			;...TTY
 AsciiBell	Equ	07H			;...procedure
 
-$Include (IbmInc.Asm)
+$Include (IbmInc)
 ;		*************************
 ;		*  Global Include File	*
 ;		*************************
@@ -69,7 +65,7 @@ $Eject
 ;		*  Data Segments  *
 ;		*******************
 
-IntSegment	Segment At 0
+IntSegment	Segment Public
 		Extrn	VidParamsTrapAddr:DWord,VideoGraphicsTrapAddr:DWord
 IntSegment	Ends
 
@@ -77,17 +73,17 @@ IntSegment	Ends
 ;               *  Data Segments  *
 ;               *******************
 
-BiosDataArea	Segment At 40H
+BiosDataArea	Segment Public
 		Extrn CrtMode:Byte, CrtColumns:Word, CrtLength:Word
 		Extrn CrtStart:Word, CursorPosn:Word, CursorMode:Word
 		Extrn ActivePage:Byte, ActiveCard:Word, CrtModeSet:Byte
 		Extrn CrtPalette:Byte, EquipFlag:Word
 BiosDataArea	Ends
 
-MonoSeg		Segment At 0B000H
+MonoSeg		Segment Public
 MonoSeg		Ends
 
-ColorSeg	Segment At 0B800H
+ColorSeg	Segment Public
 ColorSeg	Ends
 
 $Eject
@@ -329,7 +325,11 @@ SetModeJump1:
 
 		Xor	Bh,Bh			;Form index into table (Bl=mode)
 		Push	Bx			;Save Bx=crt mode
-		Mov	Bl,byte ptr Cs:OffsetTable[Bx]	;Load the offset
+%If (%BugFix Eq 0) Then (
+		Mov	Bl,OffsetTable[Bx]	;Load the offset
+) Else (
+		Mov	Bl,Byte Ptr Cs:OffsetTable[Bx]	;Load the offset
+) fI
 		Add	Si,Bx			;...and point at right list
 		Mov	Cx,16			;Do 16 bytes
 
@@ -462,7 +462,6 @@ ReadLpPos	Proc	Near			;Read Light pen position
 		Jnz	LpPosJmp1		;...jump over return if trigger
 ) Else (
 		Jz	LpPosJmp1		;...jump over return if trigger (BUGFIX)
-)
 ) fI
 		Ret				;...return not triggered
 LpPosJmp1:
@@ -868,8 +867,11 @@ HWaitRead:
 HWaitRead2:
 		In	Al,Dx			;Get status
 		Test	Al,1			;...gone back hi?
-		;Jz	HWaitRead		;...wait till it does
+%If (%BugFix Eq 0) Then (
+		Jz	HWaitRead		;...wait till it does
+) Else (
 		Jz	HWaitRead2		;...wait till it does (BUGFIX)
+) fI
 		Lodsw				;...read it quick
 		Pop	Ds			;Restore Ds
 		Assume 	Ds:BiosDataArea		;...and tell ASMBS

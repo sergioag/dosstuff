@@ -1,9 +1,5 @@
 $Title ('DTC/PC BIOS Print Screen Driver V1.0')
-$Pagelength (80)
-$Pagewidth (132)
-$Debug
-$Nogen
-;$Pagelength (80) Pagewidth (132) Debug Nogen
+$Pagelength (80) Pagewidth (132) Debug Nogen
 Name Printer
 
 
@@ -55,7 +51,8 @@ AsciiLineFeed		Equ	0AH		;Ascii line feed
 AsciiCarriageReturn	Equ	0DH		;Ascii carriage return
 
 
-$Include (Ibminc.Asm)
+$Include (Ibminc)
+;$Include (Ibminc.Asm)
 ;		*************************
 ;		*  Global Include File  *
 ;		*************************
@@ -66,8 +63,7 @@ $Eject
 ;		*  Data Segments  *
 ;		*******************
 
-;BiosDataArea	Segment Public
-BiosDataArea	Segment At 40H
+BiosDataArea	Segment Public
 		Extrn PrintScnStatus:Byte
 BiosDataArea	Ends
 $Eject
