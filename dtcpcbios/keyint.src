@@ -804,7 +804,7 @@ BufLoad:
                 Mov     Bx,BufferStart          ;...else, move the pointer
 BufCont2:
                 Cmp     Bx,KeyBufHead           ;Tail = Head?
-                Jne     BufCont2                ;...jump if not
+                Jne     BufCont3                ;...jump if not
                 Jmp     KeyBeepReturn           ;...else beep and return
 BufCont3:
                 Mov     [Di],Ax                 ;Store scan and ascii in buf.
