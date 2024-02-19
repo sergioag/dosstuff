@@ -59,7 +59,7 @@ PortPICICW3     Equ     21H             ;Initialization command word 3
 PortPICICW4     Equ     21H             ;Initialization command word 4
 PortPICOCW1     Equ     21H             ;Operation command word 1
 PortPICOCW2     Equ     20H             ;Operation command word 2
-PortPICOCW2     Equ     20H             ;Operation command word 3
+PortPICOCW3     Equ     20H             ;Operation command word 3
 PortNMIMask     Equ     0A0H            ;Non maskable interrupt mask
 NMIMask         Equ     0               ;Mask command
 NMIUnmask       Equ     80H             ;Unmask command
@@ -353,7 +353,7 @@ $Eject
 
 PortColorMode   Equ     3D8H            ;Color board mode select register
 PortColorColor  Equ     3D9H            ;Color select register
-PorColorStatus  Equ     3DAH            ;Color status register
+PortColorStatus Equ     3DAH            ;Color status register
 PortColorLPClr  Equ     3DBH            ;Clear light pen detector
 PortColorLPSet  Equ     3DCH            ;Preset light pen detector
 PortColorIndex  Equ     3D4H            ;6845 Index register

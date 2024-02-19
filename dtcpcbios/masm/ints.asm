@@ -120,7 +120,7 @@ BiosDataArea    Ends
 Bios            Segment Common
 
                 Extrn WordOut:Near, CharOut:Near, NibbleOut:Near, KeyIn:Near
-                Extrn PrintMessage:Near, Beef:Near, TimerHdwrInt:Far
+                Extrn PrintMessage:Near, Beep:Near, TimerHdwrInt:Far
                 Extrn KeyboardHdwrInt:Far, FloppyHdwrInt:Far
                 Extrn VideoDriver:Far, EquipDriver:Far
                 Extrn MemorySizeDriver:Far,FloppyDriver:Far,CommsDriver:Far
